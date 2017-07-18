@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\Animation">
+      <UniqueIdentifier>{f8798c69-cb17-4409-b08f-b9756884afe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Model">
+      <UniqueIdentifier>{1de8a72d-630f-4888-baa6-6f44f264f07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Render">
+      <UniqueIdentifier>{4914466b-eda3-4db0-bf69-8e19b9591c74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Resource">
+      <UniqueIdentifier>{c1d3973b-e689-4fb2-bd0f-c2399d01e453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Tool">
+      <UniqueIdentifier>{1dd53d35-0e3b-4fc5-9e14-0ab68dc5ee67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\UI">
+      <UniqueIdentifier>{a9d8d33a-1749-4998-a8ea-d28e6cdaadb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Animation">
+      <UniqueIdentifier>{44379ba1-5a78-4f16-9ac3-c75ebb85f875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Model">
+      <UniqueIdentifier>{359ec16a-bb6e-46d5-a3ef-729acb5b7ae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render">
+      <UniqueIdentifier>{9babcc52-848c-458a-bf26-2c8eddaeb632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Resource">
+      <UniqueIdentifier>{294167b3-322d-4e9e-a514-854ecf864155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\UI">
+      <UniqueIdentifier>{b6eceba7-8185-4827-b0bf-0f385634ec47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tool">
+      <UniqueIdentifier>{413703b3-aeeb-40a7-aa44-bb70df3dd93b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Core">
+      <UniqueIdentifier>{0c15eb8c-2630-498c-a734-5c57e35fb38d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Entity">
+      <UniqueIdentifier>{0a3094c4-1b9c-4e95-bad0-87da590c7a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Component">
+      <UniqueIdentifier>{9c9eccb2-f092-40bb-8e8a-7ceb38d13d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Core">
+      <UniqueIdentifier>{c1d57ab5-adf2-4cde-9303-54b346e40672}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Component">
+      <UniqueIdentifier>{9697dfdd-72a7-4090-bb01-96ff443739a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Collide">
+      <UniqueIdentifier>{601a3549-3de3-417d-a186-d80ef57dfe25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Collide">
+      <UniqueIdentifier>{0fc393e3-03c9-452b-a59c-dcf635c804b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AnimationClipManager.cpp">
+      <Filter>源文件\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>源文件\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModelDrawer.cpp">
+      <Filter>源文件\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpMeshLoader.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXMeshLoader.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshLoader.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshLoaderFactory.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Activity.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIModel.cpp">
+      <Filter>源文件\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="XSON.cpp">
+      <Filter>源文件\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>源文件\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>源文件\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeType.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelDrawer.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleModelDrawer.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Tiny2D.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="UIDrawer.cpp">
+      <Filter>源文件\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonEngine.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFWWindowSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSystem.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>源文件\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtility.cpp">
+      <Filter>源文件\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>源文件\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>源文件\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentManager.cpp">
+      <Filter>源文件\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CollideManager.cpp">
+      <Filter>源文件\Collide</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>源文件\Collide</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderModelDrawer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommonType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClipManager.h">
+      <Filter>头文件\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationController.h">
+      <Filter>头文件\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpMeshLoader.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXMeshLoader.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshLoader.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshLoaderFactory.h">
+      <Filter>头文件\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeType.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleModelDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Tiny2D.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="UIDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>头文件\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>头文件\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialize.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="XSON.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Activity.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIModel.h">
+      <Filter>头文件\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonEngine.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>头文件\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>头文件\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodPlane.h">
+      <Filter>头文件\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtility.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Soldier.h">
+      <Filter>头文件\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFWWindowSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowSystem.h">
+      <Filter>头文件\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="CollideManager.h">
+      <Filter>头文件\Collide</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>头文件\Collide</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentManager.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderModelDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
