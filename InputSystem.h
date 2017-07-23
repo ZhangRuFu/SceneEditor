@@ -56,11 +56,15 @@ public:
 	static InputSystem* GetInstance(void);
 
 public:
+	//МќХЬ
 	static bool isKeyDown(int key);
 	static bool isKeyUp(int key);
-	static void GetMousePosition(int &x, int &y);
+
+	//ЪѓБъ
 	static bool isMouseKeyDown(int mouseKey);
 	static bool isMouseKeyUp(int mouseKey);
+
+	static void GetMousePosition(int &x, int &y);
 
 public:
 	void KeyDown(int key);

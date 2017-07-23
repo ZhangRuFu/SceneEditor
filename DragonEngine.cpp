@@ -4,6 +4,7 @@
 #include "Monster.h"
 #include "GLFWWindowSystem.h"
 #include "Activity.h"
+#include "Picker.h"
 #include <Windows.h>
 #include <iostream>
 
@@ -14,11 +15,10 @@ using std::endl;
 
 DragonEngine::DragonEngine(void)
 {
-	string windowName = "Edward-Scissorshands-v1.0";
+	string windowName = "SceneEditor-v1.0";
 	int frameWidth, frameHeight;
 	m_gameState = GameState::PreStart;
-	m_windowSystem = GLFWWindowSystem::GetInstance(700, 700, windowName);
-	m_windowSystem->AssginEngine(this);
+	m_windowSystem = GLFWWindowSystem::GetInstance(800, 800, windowName, this);
 	m_windowSystem->GetFrameSize(frameWidth, frameHeight);
 	m_renderSystem = RenderSystem::GetInstance(this, frameWidth, frameHeight);
 	m_resourceSystem = ResourceSystem::GetInstance(this);
@@ -63,10 +63,11 @@ void DragonEngine::Init()
 	Camera *m_camera = new Camera(frameWidth, frameHeight);
 	Soldier *soldier = new Soldier();
 	soldier->GetTransform()->Move(vec3(10, 10, 0));
+	Picker *picker = new Picker();
 	//WoodPlane *woodPlane = new WoodPlane();
 	Light *light = new Light();
 	light->GetTransform()->Move(vec3(20, 20, 20));
 	//woodPlane->GetTransform()->Scale(vec3(50, 50, 50));
-
+	
 	m_resourceSystem->Init();
 }

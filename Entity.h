@@ -19,6 +19,7 @@ protected:
 
 public:
 	Component* AddComponent(ComponentArg &arg) { return m_com.AddComponent(arg); }
+	Component* AddComponent(Component &com) { return m_com.AddComponent(&com); }
 	Component* GetComponent(int type) { return m_com.GetComponent(type); }
 	ComponentManager* GetComponentManager(void) { return &m_com; }
 	Transform* GetTransform(void) { return m_transform; }

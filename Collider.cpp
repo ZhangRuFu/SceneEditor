@@ -1,5 +1,6 @@
 #include "Collider.h"
 #include "Model.h"
+#include "Ray.h"
 
 void SphereCollider::CalcModelBoundingBox(Model * model)
 {
@@ -33,4 +34,30 @@ void SphereCollider::CalcModelBoundingBox(Model * model)
 		}
 	}
 	m_radius = sqrt(m_radius);
+}
+
+bool SphereCollider::RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
+{
+	//len为float的最大值为无限距离
+	vec3 toCenter = getWorldCenter() - ray.getOrigin();						//射线起点到碰撞球圆心向量
+	float verticalLen = dot(toCenter, ray.getDirection());					//投影长度（从射线起点到垂直点）
+	vec3 intersectedVector = ray.GetPoint(verticalLen) - ray.getOrigin();
+	vec3 r = intersectedVector - toCenter;
+	float rsquare = dot(r, r);
+	float Rsquare = m_radius * m_radius;
+	if (rsquare > Rsquare)
+		return false;
+	//碰撞
+	float differentLen = sqrt(Rsquare - rsquare);
+	float practiceLen = verticalLen - differentLen;
+	if (practiceLen > len)
+		return false;
+	if (hitInfo != nullptr)
+	{
+		//在指定距离之内
+		hitInfo->setDistance(practiceLen);
+		hitInfo->setPoint(ray.GetPoint(practiceLen));
+		hitInfo->setCollider(this);
+	}
+	return true;
 }

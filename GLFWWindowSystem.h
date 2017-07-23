@@ -12,7 +12,7 @@ private:
 	static GLFWWindowSystem *m_glfwInstance;
 
 private:
-	GLFWWindowSystem(int width, int height, string windowName);
+	GLFWWindowSystem(int width, int height, string windowName, DragonEngine *engine);
 	static void KeyEvent(GLFWwindow *window, int key, int scancode, int action, int mode);
 	static void MouseEvent(GLFWwindow *window, int button, int action, int mode);
 	static void MouseMoveEvent(GLFWwindow *window, double x, double y);
@@ -23,5 +23,5 @@ private:
 public:
 	void Start();
 	void Render();
-	static GLFWWindowSystem* GetInstance(int width, int height, string windowName);
+	static GLFWWindowSystem* GetInstance(int width, int height, string windowName, DragonEngine *engine);
 };

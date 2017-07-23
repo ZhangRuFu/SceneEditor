@@ -37,6 +37,7 @@
     <ClCompile Include="GLFWWindowSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LineRender.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MathUtility.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="GLFWWindowSystem.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LineRender.h" />
     <ClInclude Include="MathUtility.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshLoader.h" />
@@ -87,6 +89,8 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelDrawer.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Picker.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="ResourceSystem.h" />
     <ClInclude Include="Serialize.h" />

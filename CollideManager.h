@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <map>
+#include "Ray.h"
 
 /*
 *
@@ -32,9 +33,12 @@ private:
 public:
 	CollideManager(ResourceSystem *rSystem);
 
-	static CollideManager* GetInstance(ResourceSystem *rSystem);
-
 	void CalcModelBoundingBox(Model* model);	//MeshManager加载新模型时调用此接口
 	void Register(GameEntity *entity);			//注册碰撞体
 	void Move(void) {}
+	bool _RayCast(const Ray &ray, RaycastHit *hitInfo, float len);
+
+	static CollideManager* GetInstance(ResourceSystem *rSystem);
+	static bool RayCast(const Ray &ray, RaycastHit *hitInfo);
+	static bool RayCast(const Ray &ray, RaycastHit *hitInfo, float len);
 };

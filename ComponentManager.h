@@ -56,7 +56,8 @@ namespace ComponentType
 		AnimationModelDrawer = MakeIdentification(ComponentClass::Drawer, 2),
 		SimpleModelDrawer = MakeIdentification(ComponentClass::Drawer, 3),
 		Tiny2DDrawer = MakeIdentification(ComponentClass::Drawer, 4),
-		ColliderModelDrawer = MakeIdentification(ComponentClass::Drawer, 5)
+		ColliderModelDrawer = MakeIdentification(ComponentClass::Drawer, 5),
+		LineDrawer = MakeIdentification(ComponentClass::Drawer, 5)
 	};
 
 	enum class Collider
@@ -97,12 +98,10 @@ class ComponentManager
 private:
 	list<Component*> m_component;
 
-private:
-	Component* AddComponent(Component *com);
 
 public:
-
 	Component* AddComponent(ComponentArg &arg);
+	Component* AddComponent(Component *com);
 	Component* GetComponent(int type);
 
 };

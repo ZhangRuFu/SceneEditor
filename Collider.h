@@ -10,7 +10,8 @@
 #include "Transform.h"
 
 class Model;
-
+class Ray;
+class RaycastHit;
 using glm::vec3;
 //----------------------------------------------------------------------------------------------------------------
 
@@ -31,6 +32,7 @@ public:
 	Collider(Transform *transform) : m_transform(transform) {}
 	virtual void CalcModelBoundingBox(Model *model) = 0;
 	virtual int GetComponentType(void) = 0;
+	virtual bool RayCast(const Ray & ray, RaycastHit *hitInfo, float len) = 0;
 
 	void SetTransform(Transform *transform) { m_transform = transform; }
 };
@@ -63,6 +65,7 @@ public:
 
 	virtual void CalcModelBoundingBox(Model *model);
 	virtual int GetComponentType(void) { return (int)ComponentType::Collider::ShpereCollider; }
+	virtual bool RayCast(const Ray & ray, RaycastHit * hitInfo, float len);
 
 	vec3 getWorldCenter(void) const { return m_center + m_transform->getPosition(); }
 };

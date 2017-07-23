@@ -3,6 +3,7 @@
 #include "Collider.h"
 #include "ResourceSystem.h"
 #include "ColliderModelDrawer.h"
+#include <limits>
 
 CollideManager::CollideManager(ResourceSystem * rSystem)
 {
@@ -15,6 +16,8 @@ CollideManager * CollideManager::GetInstance(ResourceSystem * rSystem)
 		m_instance = new CollideManager(rSystem);
 	return m_instance;
 }
+
+
 
 void CollideManager::CalcModelBoundingBox(Model * model)
 {
@@ -39,11 +42,30 @@ void CollideManager::Register(GameEntity * entity)
 		SphereCollider *collider = new SphereCollider(*(SphereCollider*)m_modelBoundingMap[id]);
 		collider->SetTransform(entity->GetTransform());
 		entity->GetComponentManager()->AddComponent(collider);
+		m_colliders.push_back(collider);
 
 		//可视化碰撞体
 		ModelArg mArg(collider, vec3(0.0f, 0.0f, 0.6f));
 		entity->AddComponent(mArg);
 	}
+}
+
+bool CollideManager::RayCast(const Ray &ray, RaycastHit * hitInfo)
+{
+	static std::numeric_limits<float> floatMax;
+	return m_instance->_RayCast(ray, hitInfo, floatMax.max());
+}
+
+bool CollideManager::RayCast(const Ray &ray, RaycastHit * hitInfo, float len)
+{
+	return m_instance->_RayCast(ray, hitInfo, len);
+}
+
+bool CollideManager::_RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
+{
+	for (list<Collider*>::iterator i = m_colliders.begin(); i != m_colliders.end(); i++)
+		if((*i)->RayCast(ray, hitInfo, len))
+			return true;
 }
 
 

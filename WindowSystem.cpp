@@ -3,9 +3,9 @@
 #include "CommonType.h"
 #include "Activity.h"
 
-WindowSystem::WindowSystem(int width, int height, string windowName) : m_windowWidth(width), m_windowHeight(height), m_windowName(windowName)
+WindowSystem::WindowSystem(int width, int height, string windowName, DragonEngine *engine) : m_windowWidth(width), m_windowHeight(height), m_windowName(windowName)
 {
-	m_engine = nullptr;
+	m_engine = engine;
 	m_activity = nullptr;
 }
 
@@ -18,11 +18,6 @@ void WindowSystem::GetFrameSize(int & frameWidth, int & frameHeight)
 void WindowSystem::AssignInput(InputSystem * input)
 {
 	m_input = input;
-}
-
-void WindowSystem::AssginEngine(DragonEngine * engine)
-{
-	m_engine = engine;
 }
 
 void WindowSystem::AddActivity(Activity * activity)

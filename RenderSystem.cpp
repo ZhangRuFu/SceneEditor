@@ -65,6 +65,7 @@ bool RenderSystem::Init()
 	CreateShader("E:\\OpenGL\\Shader\\ModelRender\\Animation\\", "AnimationModel");
 	CreateShader("E:\\OpenGL\\Shader\\2D\\", "2D");
 	CreateShader("E:\\OpenGL\\Shader\\Font\\", "font");
+	CreateShader("E:\\OpenGL\\Shader\\", "empty");
 
 	//×ÖÌå¼ÓÔØ
 	FontRender::Init();

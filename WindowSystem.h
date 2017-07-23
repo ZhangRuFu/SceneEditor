@@ -72,10 +72,9 @@ protected:
 	
 
 public:
-	WindowSystem(int width, int height, string windowName);
+	WindowSystem(int width, int height, string windowName, DragonEngine *engine);
 	void GetFrameSize(int &frameWidth, int &frameHeight);
 	void AssignInput(InputSystem *input);
-	void AssginEngine(DragonEngine *engine);
 
 public:
 	virtual void Start() = 0;

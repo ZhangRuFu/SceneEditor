@@ -9,7 +9,7 @@
 using std::cout;
 using std::endl;
 
-GLFWWindowSystem::GLFWWindowSystem(int width, int height, string windowName) : WindowSystem(width, height, windowName)
+GLFWWindowSystem::GLFWWindowSystem(int width, int height, string windowName, DragonEngine *engine) : WindowSystem(width, height, windowName, engine)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -24,9 +24,9 @@ GLFWWindowSystem::GLFWWindowSystem(int width, int height, string windowName) : W
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(m_window);
-
+	
 	glfwGetFramebufferSize(m_window, &m_frameWidth, &m_frameHeight);
-
+	
 	//¼üÅÌ¶¯×÷Ó³Éä
 	m_keyActionMap[GLFW_PRESS] = KeyMotion::KeyDown;
 	m_keyActionMap[GLFW_RELEASE] = KeyMotion::KeyUp;
@@ -169,10 +169,10 @@ void GLFWWindowSystem::Render(GLFWwindow * window)
 	m_glfwInstance->Render();
 }
 
-GLFWWindowSystem * GLFWWindowSystem::GetInstance(int width, int height, string windowName)
+GLFWWindowSystem * GLFWWindowSystem::GetInstance(int width, int height, string windowName, DragonEngine *engine)
 {
 	if (m_glfwInstance == nullptr)
-		m_glfwInstance = new GLFWWindowSystem(width, height, windowName);
+		m_glfwInstance = new GLFWWindowSystem(width, height, windowName, engine);
 	return m_glfwInstance;
 }
 

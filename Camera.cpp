@@ -12,6 +12,10 @@ Camera::Camera(int windowWidth, int windowHeight, Transform transform, vec3 fron
 
 	m_speed = m_defaultSpeed;
 	m_sensitivety = m_defaultSensitivety;
+
+	m_near = 0.1;
+	m_far = 5000;
+	setFOV(45.0);
 	
 	GenDirection();
 	ResourceSystem::Register(this);
@@ -19,8 +23,8 @@ Camera::Camera(int windowWidth, int windowHeight, Transform transform, vec3 fron
 
 void Camera::GenDirection(void)
 {
-	m_pitch = std::acos(m_front.y);
-	m_yaw = std::asin(m_front.z / sin(m_pitch));
+	m_pitch = glm::acos(m_front.y);
+	m_yaw = glm::asin(glm::clamp(m_front.z / sin(m_pitch), -1.0f, 1.0f));
 }
 
 void Camera::Rotate(int deltaX, int deltaY)
@@ -55,7 +59,7 @@ void Camera::Translate(Direction direction)
 	case Direction::Up:
 		m_transform->Move(m_up * m_speed);
 		break;
-	case Direction::Dowm:
+	case Direction::Down:
 		m_transform->Move(-m_up * m_speed);
 		break;
 	}
@@ -68,12 +72,30 @@ mat4 Camera::GenViewMatrix()
 
 mat4 Camera::GenProjectionMatrix()
 {
-	return perspective<float>(45, 1, 0.1, 5000);
+	return perspective<float>(m_fov, (float)m_windowWidth / m_windowHeight, m_near, m_far);
 }
 
 mat4 Camera::GenWindowProjectionMatrix(float nearZ, float farZ)
 {
 	return ortho<float>(0, m_windowWidth, -m_windowHeight, 0, nearZ, farZ);
+}
+
+Ray Camera::ScreenPointToRay(ivec2 &screenPoint)
+{
+	vec3 centerPoint = m_transform->getPosition() + m_near * m_front;		//近平面中心点
+	
+	vec3 right = normalize(glm::cross(m_up, -m_front));
+	vec3 up = normalize(glm::cross(-m_front, right));
+	vec2 screenCenter(m_windowWidth / 2.0, m_windowHeight / 2.0);
+	vec3 screenVector = (m_nearH / 2) / screenCenter.y * vec3(screenPoint.x - screenCenter.x, screenCenter.y - screenPoint.y, 0.0);
+	//vec3 screenVector = vec3(m_nearW * ((screenPoint.x - screenCenter.x) / screenCenter.x), m_nearH * ((screenPoint.y / screenCenter.y) / screenCenter.y), 0);	//屏幕中心到点击点的向量,缩放到近平面
+	vec3 nearPoint = centerPoint + right * screenVector.x + up * screenVector.y;
+	vec3 rayDirection = normalize(nearPoint - m_transform->getPosition());
+	Ray ray;
+	ray.setDirection(rayDirection);
+	ray.setOrigin(m_transform->getPosition());
+
+	return ray;
 }
 
 
@@ -89,6 +111,8 @@ void Camera::Move()
 		Translate(Camera::Direction::Right);
 	if (InputSystem::isKeyDown(KEY_SPACE))
 		Translate(Direction::Up);
+	if (InputSystem::isKeyDown(KEY_LCONTROL))
+		Translate(Direction::Down);
 
 	if (InputSystem::isKeyDown(KEY_OEM_PLUS))
 		m_speed += 0.0005;

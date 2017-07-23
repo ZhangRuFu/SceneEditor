@@ -189,6 +189,9 @@
     <ClCompile Include="ColliderModelDrawer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LineRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonType.h">
@@ -318,6 +321,15 @@
       <Filter>头文件\Render</Filter>
     </ClInclude>
     <ClInclude Include="ColliderModelDrawer.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>头文件\Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Picker.h">
+      <Filter>头文件\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="LineRender.h">
       <Filter>头文件\Render</Filter>
     </ClInclude>
   </ItemGroup>
