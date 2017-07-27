@@ -11,11 +11,11 @@
 void StaticModelDrawer::Draw()
 {
 	//Model¾ØÕó
-	mat4 model;
-	model = translate(model, m_transform->getPosition());
+	mat4 model = m_transform->GetModelMatrix();
+	/*model = translate(model, m_transform->getPosition());
 	vec3 rotation = m_transform->getRotation();
 	model = model * (mat4)eulerAngleXYZ(radians((double)rotation.x), radians((double)rotation.y), radians((double)rotation.z));
-	model = scale(model, m_transform->getScale());
+	model = scale(model, m_transform->getScale());*/
 
 	GLenum modelLocation = m_shader->GetUniformLocation("model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(model));
