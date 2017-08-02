@@ -75,7 +75,16 @@ bool RenderSystem::Init()
 
 void RenderSystem::Draw()
 {
+	m_engine->GetResourceSystem()->ReadyRender();
+
+	static list<Drawer*> afterEntity;
+	afterEntity.clear();
+
+	//背景暂时为纯色背景
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//Entity渲染
+	bool needSetRenderMode = false;
 	for (unsigned int i = 0; i < m_renderList.size(); i++)
 	{
 		Shader *shader = m_shaders[m_renderList[i].m_shaderIndex];
@@ -83,12 +92,41 @@ void RenderSystem::Draw()
 		list<Drawer*> &drawerList = m_renderList[i].m_drawerList;
 		for (list<Drawer*>::iterator iterator = drawerList.begin(); iterator != drawerList.end(); iterator++)
 		{
+			if ((*iterator)->GetRenderLevel() == RenderLevel::AfterEntity)
+			{
+				afterEntity.push_back(*iterator);
+				continue;
+			}
+			needSetRenderMode = (*iterator)->NeedSetRenderMode();
+			if (needSetRenderMode)
+				(*iterator)->SetRenderMode();
+
 			//=====================================PublicSet多次！=============================================
 			if (iterator == drawerList.begin())
 				(*iterator)->PublicSet();
 			(*iterator)->Draw();
+
+			if (needSetRenderMode)
+				(*iterator)->SetRenderMode();
 		}
 	}
+
+	//AfterEntity渲染
+	list<Drawer*>::iterator i = afterEntity.begin();
+	while (i != afterEntity.end())
+	{
+		needSetRenderMode = (*i)->NeedSetRenderMode();
+		if (needSetRenderMode)
+			(*i)->SetRenderMode();
+
+		//=====================================PublicSet多次！=============================================
+		(*i)->PublicSet();
+		(*i)->Draw();
+
+		if (needSetRenderMode)
+			(*i)->SetRenderMode();
+	}
+
 
 	//UI绘制
 	Activity *activity = m_engine->GetWindowSystem()->GetActive();

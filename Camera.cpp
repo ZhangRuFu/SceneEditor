@@ -98,6 +98,14 @@ Ray Camera::ScreenPointToRay(ivec2 &screenPoint)
 	return ray;
 }
 
+vec2 Camera::WorldToScreenPoint(vec3 world)
+{
+	vec4 w = vec4(world, 1.0);
+	vec4 s = GenProjectionMatrix() * GenViewMatrix() * w;
+	s = s / s.z;
+	return vec2(m_windowWidth * (s.x + 1.0f) / 2.0f, m_windowHeight * (1.0f - s.y) / 2.0f );
+}
+
 
 void Camera::Move()
 {

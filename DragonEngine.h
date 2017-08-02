@@ -11,23 +11,25 @@
 #include "WindowSystem.h"
 #include "UI.h"
 #include "Time.h"
+#include "CommonType.h"
 
 class DragonEngine
 {
-public:
-	enum GameState { PreStart, Gaming, Pause, Finish };
-
 private:
+	static DragonEngine *m_instance;
+
 	GameState m_gameState;
+	GameLoopState m_gameLoopState;
 	RenderSystem *m_renderSystem;
 	ResourceSystem *m_resourceSystem;
 	InputSystem *m_inputSystem;
 	WindowSystem *m_windowSystem;
 	Time *m_time;
 
-public:
+private:
 	DragonEngine(void);
 
+public:
 	void Move();
 
 	void Draw();
@@ -37,6 +39,10 @@ public:
 	void Init();
 
 	WindowSystem *GetWindowSystem(void) { return m_windowSystem; }
+	ResourceSystem *GetResourceSystem(void) { return m_resourceSystem; }
 
-	GameState GetGameState(void) { return m_gameState; }
+	static DragonEngine* Create(void);
+
+	static GameState GetGameState(void) { return m_instance->m_gameState; }
+	static GameLoopState GetGameLoopState(void) { return m_instance->m_gameLoopState; }
 };

@@ -1,9 +1,10 @@
+#include <list>
 #include "Activity.h"
 #include "MeshManager.h"
 #include "AnimationModelDrawer.h"
 #include "AnimationController.h"
-#include <list>
 #include "XSON.h"
+
 
 Activity::Activity(string id) : ViewGroup(this, id, ivec2(0, 0), View::Dimension::MATCH_PARENT, View::Dimension::MATCH_PARENT)
 {

@@ -78,7 +78,6 @@ public:
 	
 	virtual void Draw() {}
 	virtual void PublicSet();
-	virtual RenderLevel GetRenderLevel(void) { return RenderLevel::NonRender; }
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::Tiny2DDrawer; }
 
 private:

@@ -1,6 +1,7 @@
 #include <GLM\gtc\matrix_transform.hpp>
 #include <GLM\gtx\euler_angles.hpp>
 #include "Transform.h"
+#include "DragonEngine.h"
 
 using glm::vec4;
 
@@ -30,6 +31,23 @@ void Transform::ChangeOrientation(float angle)
 void Transform::Scale(vec3 & scale)
 {
 	m_scale = scale;
+}
+
+void Transform::Rotate(Axis axis, float angle)
+{
+	//angle = glm::radians(angle);
+	switch (axis)
+	{
+	case Axis::X:
+		m_rotation.x += angle;
+		break;
+	case Axis::Y:
+		m_rotation.y += angle;
+		break;
+	case Axis::Z:
+		m_rotation.z += angle;
+		break;
+	}
 }
 
 vec3 Transform::getPosition(void) const
@@ -63,16 +81,28 @@ void Transform::AttachChild(Transform * child)
 
 mat4 Transform::GetModelMatrix(void)
 {
-	if (m_isUpdated)
+	if (DragonEngine::GetGameLoopState() == GameLoopState::LogicMove)
+	{
+		CalculateModelMatrix();
 		return m_modelMatrix;
-	
+	}
+	else
+	{
+		if (m_isUpdated)
+			return m_modelMatrix;
+		CalculateModelMatrix();
+		m_isUpdated = true;
+		return m_modelMatrix;
+	}
+}
+
+void Transform::CalculateModelMatrix(void)
+{
 	m_modelMatrix = mat4();
 	m_modelMatrix = glm::translate(m_modelMatrix, m_position);
 	m_modelMatrix = m_modelMatrix * (mat4)glm::eulerAngleXYZ(glm::radians((double)m_rotation.x), glm::radians((double)m_rotation.y), glm::radians((double)m_rotation.z));
 	m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
-	
+
 	if (m_father != nullptr)
 		m_modelMatrix = m_father->GetModelMatrix() * m_modelMatrix;
-	m_isUpdated = true;
-	return m_modelMatrix;
 }

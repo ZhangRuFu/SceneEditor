@@ -25,16 +25,22 @@ using glm::vec3;
 
 class Collider : public Component
 {
+private:
+	GameEntity *m_entity = nullptr;
+
 protected:
-	const Transform *m_transform;
+	Transform *m_transform;
 
 public:
 	Collider(Transform *transform) : m_transform(transform) {}
+
+	void SetEntity(GameEntity *entity);
+	GameEntity* GetEntity(void) const { return m_entity; }
+	const Transform* getTransform(void) const { return m_transform; }
+	
 	virtual void CalcModelBoundingBox(Model *model) = 0;
 	virtual int GetComponentType(void) = 0;
 	virtual bool RayCast(const Ray & ray, RaycastHit *hitInfo, float len) = 0;
-
-	void SetTransform(Transform *transform) { m_transform = transform; }
 };
 
 
@@ -67,7 +73,7 @@ public:
 	virtual int GetComponentType(void) { return (int)ComponentType::Collider::ShpereCollider; }
 	virtual bool RayCast(const Ray & ray, RaycastHit * hitInfo, float len);
 
-	vec3 getWorldCenter(void) const { return m_center + m_transform->getPosition(); }
+	vec3 getWorldCenter(void) const;
 };
 
 

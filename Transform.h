@@ -2,6 +2,7 @@
 #include <GLM\glm.hpp>
 #include <list>
 #include "ComponentManager.h"
+#include "CommonType.h"
 /*
  *	引擎版本：Dragon Engine v0.1;
  *	类　　名：Transform
@@ -35,11 +36,13 @@ public:
 	void Move(vec3 step);
 	void ChangeOrientation(float angle);		//暂时只能在XZ平面绕Y轴旋转
 	void Scale(vec3 &scale);
+	void Rotate(Axis axis, float angle);
 	
 	vec3 getPosition(void) const;
 	vec3 getRotation(void) const;
 	vec3 getScale(void) const;
 	vec3 getOrientation(void) const;
+	Transform* getFatherTransform(void) const { return m_father; }
 
 	void ReadyRender() { m_isUpdated = false; }
 	void AttachChild(Transform *child);
@@ -50,4 +53,5 @@ public:
 
 private:
 	void AttachFather(Transform *father) { m_father = father; }
+	void CalculateModelMatrix(void);
 };

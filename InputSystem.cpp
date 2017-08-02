@@ -1,4 +1,5 @@
 #include "InputSystem.h"
+#include "CommonType.h"
 
 InputSystem::InputSystem(void)
 {
@@ -33,19 +34,24 @@ void InputSystem::KeyUp(int key)
 	m_keyManager->KeyUp(key);
 }
 
-void InputSystem::SetMousePosition(int x, int y)
+void InputSystem::MouseEvent(int x, int y, MouseMotion mouseMotion)
 {
+	static bool isDown[]{ false, true, false, true, false, false };
+
 	m_mouseManager->SetMousePosition(x, y);
+
+	if (mouseMotion == MouseMotion::MouseMove)
+		m_mouseManager->MouseMove();
+	else if (isDown[(int)mouseMotion])
+		m_mouseManager->MouseKeyDown(mouseMotion);
+	else
+		m_mouseManager->MouseKeyUp(mouseMotion);
 }
 
-void InputSystem::MouseKeyDown(int mouseKey)
+void InputSystem::Move(void)
 {
-	m_mouseManager->MouseKeyDown(mouseKey);
-}
-
-void InputSystem::MouseKeyUp(int mouseKey)
-{
-	m_mouseManager->MouseKeyUp(mouseKey);
+	m_mouseManager->Move();
+	m_keyManager->Move();
 }
 
 void InputSystem::GetMousePosition(int & x, int & y)
@@ -62,6 +68,20 @@ bool InputSystem::isMouseKeyUp(int mouseKey)
 {
 	return m_instance->m_mouseManager->isMouseKeyUp(mouseKey);
 }
+
+bool InputSystem::isOnMouseKeyDown(int mouseKey)
+{
+	return m_instance->m_mouseManager->isOnMouseKeyDown(mouseKey);
+}
+
+bool InputSystem::isOnMouseKeyUp(int mouseKey)
+{
+	return m_instance->m_mouseManager->isOnMouseKeyDown(mouseKey);
+}
+
+
+
+
 
 KeyManager::KeyManager(void)
 {
@@ -93,8 +113,19 @@ void KeyManager::KeyUp(int key)
 	m_key[key] = false;
 }
 
+void KeyManager::Move(void)
+{
+	//====================================================待添加================================================
+}
+
+
+
+
+
+
 MouseManager::MouseManager(void)
 {
+	//所有按键初始均为弹起状态
 	for (int i = 0; i < m_mouseKeyCount; i++)
 		m_mouseKey[i] = false;
 }
@@ -119,22 +150,56 @@ bool MouseManager::isMouseKeyUp(int mouseKey)
 	return !m_mouseKey[mouseKey];
 }
 
+bool MouseManager::isOnMouseKeyDown(int mouseKey)
+{
+	static MouseMotion mouseMap[2]{ MouseMotion::LeftButtonDown, MouseMotion::RightButtonDown };
+
+	if (mouseKey <= MOUSE_UNKNOWN || mouseKey >= MOUSE_KEY_MIDDLE)
+		return false;
+	return mouseMap[mouseKey - MOUSE_KEY_LEFT] == m_mouseMotion;
+}
+
+bool MouseManager::isOnMouseKeyUp(int mouseKey)
+{
+	static MouseMotion mouseMap[2]{ MouseMotion::LeftButtonUp, MouseMotion::RightButtonUp };
+
+	if (mouseKey <= MOUSE_UNKNOWN || mouseKey >= MOUSE_KEY_MIDDLE)
+		return false;
+	return mouseMap[mouseKey - MOUSE_KEY_LEFT] == m_mouseMotion;
+}
+
 void MouseManager::SetMousePosition(int x, int y)
 {
 	m_x = x;
 	m_y = y;
 }
 
-void MouseManager::MouseKeyDown(int mouseKey)
+void MouseManager::MouseKeyDown(MouseMotion motion)
 {
+	static int buttonMap[]{ MOUSE_UNKNOWN, MOUSE_KEY_RIGHT, MOUSE_KEY_RIGHT, MOUSE_KEY_LEFT, MOUSE_KEY_LEFT, MOUSE_KEY_MIDDLE };
+	int mouseKey = buttonMap[(int)motion];
 	if(mouseKey > 0 && mouseKey < m_mouseKeyCount)
 		m_mouseKey[mouseKey] = true;
+	m_mouseMotion = motion;
 }
 
-void MouseManager::MouseKeyUp(int mouseKey)
+void MouseManager::MouseKeyUp(MouseMotion motion)
 {
+	static int buttonMap[]{ MOUSE_UNKNOWN, MOUSE_KEY_RIGHT, MOUSE_KEY_RIGHT, MOUSE_KEY_LEFT, MOUSE_KEY_LEFT, MOUSE_KEY_MIDDLE };
+	int mouseKey = buttonMap[(int)motion];
 	if (mouseKey > 0 && mouseKey < m_mouseKeyCount)
 		m_mouseKey[mouseKey] = false;
+	m_mouseMotion = motion;
+}
+
+void MouseManager::MouseMove(void)
+{
+	m_mouseMotion = MouseMotion::MouseMove;
+}
+
+void MouseManager::Move(void)
+{
+	m_mouseMotion = MouseMotion::NoughtMouse;
 }
 
 

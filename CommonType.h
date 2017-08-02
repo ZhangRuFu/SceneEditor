@@ -4,8 +4,11 @@
 
 using std::vector;
 
-enum BasicMesh {CUBE = 0, PLANE, SPHERE, BASICMESHCOUNT, BASICMESHMAX = 20};
-enum RenderLevel { Entity, UI, NonRender };
+enum class Axis{X, Y, Z};
+enum BasicMesh {CUBE = 0, PLANE, SPHERE, CONE, BASICMESHCOUNT, BASICMESHMAX = 20};
+enum class RenderLevel {NonRender, Background, AfterBackground, Entity, AfterEntity, UI};
+enum class GameState { PreStart, Gaming, Pause, Finish };
+enum class GameLoopState { Ready, LogicMove, Render };
 
 class TextureInfo
 {
@@ -28,6 +31,8 @@ struct GraphicsBuffer
 	vector<GLenum> m_vbo;
 	vector<GLenum> m_ebo;
 };
+
+enum class RenderModeType { DepthTest };
 
 #define KEY_LBUTTON			1	//Êó±ê×ó¼ü
 #define KEY_RBUTTON			2	//Êó±êÓÒ¼ü

@@ -1,6 +1,10 @@
+#include <exception>
+#include <GLM\glm.hpp>
+#include <GLM\gtc\matrix_transform.hpp>
 #include "Collider.h"
 #include "Model.h"
 #include "Ray.h"
+#include "Entity.h"
 
 void SphereCollider::CalcModelBoundingBox(Model * model)
 {
@@ -60,4 +64,20 @@ bool SphereCollider::RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
 		hitInfo->setCollider(this);
 	}
 	return true;
+}
+
+vec3 SphereCollider::getWorldCenter(void) const
+{
+	 mat4 model = m_transform->GetModelMatrix();
+	 return vec3(model * glm::vec4(m_center, 1.0f));
+}
+
+void Collider::SetEntity(GameEntity * entity)
+{
+	if (entity == nullptr)
+		throw std::exception("Collider : entityΪnull");
+	m_entity = entity;
+	m_transform = m_entity->GetTransform();
+	if (m_transform == nullptr)
+		throw std::exception("Collider : transformΪnull");
 }

@@ -3,7 +3,7 @@
 
 int main()
 {
-	DragonEngine *dragonEngine = new DragonEngine();
+	DragonEngine *dragonEngine = DragonEngine::Create();
 	dragonEngine->Start();
 	return 0;
 }

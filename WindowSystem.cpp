@@ -31,22 +31,8 @@ void WindowSystem::AddActivity(Activity * activity)
 
 void WindowSystem::MouseEvent(int x, int y, MouseMotion mouseMotion)
 {
-	static int buttonMap[]{ MOUSE_UNKNOWN, MOUSE_KEY_RIGHT, MOUSE_KEY_RIGHT, MOUSE_KEY_LEFT, MOUSE_KEY_LEFT, MOUSE_KEY_MIDDLE };
-	static bool isDown[]{ false, true, false, true, false, false};
-	Event mouseEvent;
-	mouseEvent.m_mousePosition.x = x;
-	mouseEvent.m_mousePosition.y = y;
-	mouseEvent.m_mouseMotion = mouseMotion;
-
-	m_input->SetMousePosition(x, y);
-	if (isDown[mouseMotion])
-	{
-		m_input->MouseKeyDown(buttonMap[mouseMotion]);
-	}
-	else
-	{
-		m_input->MouseKeyUp(buttonMap[mouseMotion]);
-	}
+	m_input->MouseEvent(x, y, mouseMotion);
+	
 	if(m_activity != nullptr)
 		m_activity->AcceptEvent(ivec2(x, y), mouseMotion);
 }

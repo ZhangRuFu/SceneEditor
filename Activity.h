@@ -1,6 +1,8 @@
 #pragma once
-#include "UI.h"
 #include <string>
+#include "UI.h"
+#include "InputSystem.h"
+
 
 
 class Tiny2D;

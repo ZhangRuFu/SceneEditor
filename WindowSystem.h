@@ -9,7 +9,7 @@
 #include <map>
 #include <GLM\glm.hpp>
 #include "UIModel.h"
-
+#include "InputSystem.h"
 using std::string;
 using std::map;
 
@@ -20,9 +20,6 @@ class InputSystem;
 *	Event ÊÂ¼þ
 *
 */
-
-enum MouseMotion { NoughtMouse, RightButtonDown, RightButtonUp, LeftButtonDown, LeftButtonUp, MouseMove };
-enum KeyMotion { NoughtKey, KeyDown, KeyUp, KeyRepeat };
 
 struct Event
 {
@@ -46,13 +43,13 @@ struct Event
 	bool isMouseKeyDown(void)
 	{
 		static const bool isDown[]{ false, true, false, true, false, false };
-		return isDown[m_mouseMotion];
+		return isDown[(int)m_mouseMotion];
 	}
 
 	bool isMouseKeyUp(void)
 	{
 		static const bool isUp[]{ false, false, true, false, true, false };
-		return isUp[m_mouseMotion];
+		return isUp[(int)m_mouseMotion];
 	}
 };
 

@@ -40,13 +40,13 @@ void CollideManager::Register(GameEntity * entity)
 	if (m_modelBoundingMap.find(id) != m_modelBoundingMap.end())
 	{
 		SphereCollider *collider = new SphereCollider(*(SphereCollider*)m_modelBoundingMap[id]);
-		collider->SetTransform(entity->GetTransform());
+		collider->SetEntity(entity);
 		entity->GetComponentManager()->AddComponent(collider);
 		m_colliders.push_back(collider);
 
 		//可视化碰撞体
-		ModelArg mArg(collider, vec3(0.0f, 0.0f, 0.6f));
-		entity->AddComponent(mArg);
+		//ModelArg mArg(collider, vec3(0.0f, 0.0f, 0.6f));
+		//entity->AddComponent(mArg);
 	}
 }
 

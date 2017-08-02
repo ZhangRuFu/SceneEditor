@@ -11,20 +11,21 @@ using glm::vec3;
 class LineDrawer : public Drawer
 {
 private:
-	vec3 m_origin;
-	vec3 m_dest;
+	vector<vec3> m_lineVertics;
+	bool m_isChanged = false;
+	Transform *m_transform;
 
 protected:
-	LineDrawer();
+	LineDrawer(Transform *transform);
 
 public:
 	virtual void Draw();
 	virtual void PublicSet();
-	virtual RenderLevel GetRenderLevel() { return RenderLevel::Entity; };
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::LineDrawer; }
 
 	void setOrigin(vec3 origin);
 	void setDestination(vec3 dest);
 	void SetRay(const Ray &ray, float len);
-	static LineDrawer* Create(void) { LineDrawer *instance = new LineDrawer();instance->Register();return instance; }
+	void AddVertex(vec3 position);
+	static LineDrawer* Create(Transform *transform = nullptr) { LineDrawer *instance = new LineDrawer(transform);instance->Register();return instance; }
 };

@@ -43,6 +43,7 @@ private:
 
 public:
 	static ResourceSystem* GetInstance(DragonEngine *engine);
+	
 	//=========================================这里应该只保留一个注册函数，函数内进行类型判定=====================================
 	static void Register(GameEntity* entity);
 	static void Register(GameSpirit *spirit);
@@ -54,6 +55,8 @@ public:
 
 	MeshManager* GetMeshManager(void) { return m_meshManager; }
 	CollideManager *GetCollideManager(void) { return m_collideManager; }
+
+	void ReadyRender(void);
 
 	void Init();
 	void Move();

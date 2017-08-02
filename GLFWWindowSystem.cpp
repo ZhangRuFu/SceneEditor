@@ -188,7 +188,7 @@ void GLFWWindowSystem::Start()
 
 void GLFWWindowSystem::Render()
 {
-	if (m_engine && m_engine->GetGameState() == DragonEngine::GameState::Gaming)
+	if (m_engine && m_engine->GetGameState() == GameState::Gaming)
 	{
 		m_engine->Move();
 		m_engine->Draw();

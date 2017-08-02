@@ -24,6 +24,7 @@ public:
 	ComponentManager* GetComponentManager(void) { return &m_com; }
 	Transform* GetTransform(void) { return m_transform; }
 	GameEntity();
+	virtual ~GameEntity(void) {}
 };
 
 /*

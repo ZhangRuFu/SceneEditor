@@ -6,13 +6,19 @@
 #include "Ray.h"
 #include "CollideManager.h"
 #include "LineRender.h"
+#include "TransformEditor.h"
 #include <stdio.h>
 class Picker : public GameSpirit
 {
+private:
+	TranslateAxis *m_axis = nullptr;
+
 public:
+	Picker(TranslateAxis *axis) : m_axis(axis) {}
+
 	virtual void Move()
 	{
-		if (!InputSystem::isMouseKeyDown(MOUSE_KEY_LEFT))
+		if (!InputSystem::isOnMouseKeyDown(MOUSE_KEY_LEFT))
 			return;
 		ivec2 clickPoint;
 		InputSystem::GetMousePosition(clickPoint.x, clickPoint.y);
@@ -20,18 +26,31 @@ public:
 		if (camera != nullptr)
 		{
 			Ray ray = camera->ScreenPointToRay(clickPoint);
-			LineDrawer *drawer = (LineDrawer*)GetComponent((int)ComponentType::Drawer::LineDrawer);
+			
+			//可视化射线
+			/*LineDrawer *drawer = (LineDrawer*)GetComponent((int)ComponentType::Drawer::LineDrawer);
 			if (drawer == nullptr)
 			{
 				drawer = LineDrawer::Create();
 				AddComponent(*drawer);
 			}
-			drawer->SetRay(ray, 100);
+			drawer->SetRay(ray, 100);*/
+			
+			//射线检测
 			RaycastHit hitInfo;
 			if (CollideManager::RayCast(ray, &hitInfo))
-				printf("击中!\n");
+			{
+				std::cout << "击中" << std::endl;
+				GameEntity *entity = hitInfo.getCollider()->GetEntity();
+				TranslateSubAxis* axis = dynamic_cast<TranslateSubAxis*>(entity);
+				//是否击中坐标轴
+				if (axis != nullptr)
+					axis->Hit();
+				else
+					m_axis->setTargetTransform(entity->GetTransform());
+			}
 			else
-				printf("未击中!\n");
+				m_axis->ReleaseTarget();
 		}
 	}
 };

@@ -21,7 +21,7 @@ private:
 	const SphereCollider *m_collider;
 
 protected:
-	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec3 color) : SimpleModelDrawer(mesh, nullptr, color)
+	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec3 color) : SimpleModelDrawer(mesh, (Transform*)(collider->getTransform()), color)
 	{
 		m_collider = collider;
 	}

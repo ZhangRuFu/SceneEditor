@@ -50,6 +50,15 @@ void ResourceSystem::Register(AnimationController * animationController)
 		m_instance->m_animationControllers.push_back(animationController);
 }
 
+void ResourceSystem::ReadyRender(void)
+{
+	for (list<GameEntity*>::iterator i = m_entityList.begin(); i != m_entityList.end(); i++)
+		(*i)->GetTransform()->ReadyRender();
+
+	for (list<GameSpirit*>::iterator i = m_spiritList.begin(); i != m_spiritList.end(); i++)
+		(*i)->GetTransform()->ReadyRender();
+}
+
 void ResourceSystem::Init()
 {
 	//=======================================暂时只添加碰撞体========================================

@@ -3,6 +3,8 @@
 #include "Mesh.h"
 #include "ModelDrawer.h"
 #include "RenderSystem.h"
+#include "InputSystem.h"
+#include "CommonType.h"
 
 /*
 *	ÒýÇæ°æ±¾£ºDragon Engine v0.1;
@@ -21,6 +23,6 @@ public:
 
 	void Move()
 	{
-
+		
 	}
 };

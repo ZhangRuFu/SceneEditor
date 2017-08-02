@@ -10,6 +10,7 @@ Tiny2D::Tiny2D(string shaderName) : Drawer(shaderName)
 	if (m_shapes == nullptr)
 		InitShapeData();
 	Drawer::m_buffers = m_shapeBuffer;
+	Drawer::ChangeRenderLevel(RenderLevel::NonRender);
 }
 
 

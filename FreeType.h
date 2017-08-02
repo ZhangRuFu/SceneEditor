@@ -43,7 +43,6 @@ public:
 	void DrawText(const string &str, vec2 position, int fontSize, vec3 color, float depth = 0.0f);
 	virtual void Draw(void) = 0;
 	virtual void PublicSet(void);
-	virtual RenderLevel GetRenderLevel(void) { return RenderLevel::NonRender; }
 
 	static void GetDimension(const string &str, int &width, int &height);
 	static void Init(void);

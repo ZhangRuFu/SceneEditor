@@ -70,6 +70,12 @@
     <Filter Include="头文件\Collide">
       <UniqueIdentifier>{0fc393e3-03c9-452b-a59c-dcf635c804b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Render\RenderMode">
+      <UniqueIdentifier>{cf94baa0-3d4b-4258-b728-17065ca25f2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Render\RenderMode">
+      <UniqueIdentifier>{cf4d0b3f-b3c1-43c0-9a4a-ce35357e3dd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationClipManager.cpp">
@@ -190,6 +196,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LineRender.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderMode.cpp">
+      <Filter>源文件\Render\RenderMode</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformEditor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -331,6 +343,12 @@
     </ClInclude>
     <ClInclude Include="LineRender.h">
       <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderMode.h">
+      <Filter>头文件\Render\RenderMode</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformEditor.h">
+      <Filter>头文件\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

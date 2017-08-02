@@ -51,6 +51,7 @@ public:
 	mat4 GenWindowProjectionMatrix(float nearZ = 0.0f, float farZ = 0.0f);
 
 	Ray ScreenPointToRay(ivec2 &screenPoint);
+	vec2 WorldToScreenPoint(vec3 world);
 
 	void setFOV(int fov) { m_fov = fov;m_nearH = 2 * m_near * tan(m_fov / 2.0); m_nearW = m_nearH * ((float)m_windowWidth / m_windowHeight); }
 	float getFOV(void) { return m_fov; }

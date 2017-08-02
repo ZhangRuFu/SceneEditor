@@ -12,8 +12,9 @@ void ColliderModelDrawer::Draw()
 {
 	//Model¾ØÕó
 	mat4 model;
-	model = translate(model, m_collider->getWorldCenter());
+	model = translate(model, m_collider->getCenter());
 	model = scale(model, vec3(m_collider->getRadius()));
+	model = m_transform->GetModelMatrix() * model;
 
 	glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, value_ptr(model));
 	glUniform4fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(vec4(GetColor(), 0.5)));

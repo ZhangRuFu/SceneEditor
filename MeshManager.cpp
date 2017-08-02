@@ -239,6 +239,103 @@ void MeshManager::CreateBasicMesh(void)
 	sphereMesh->SetModelID(BasicMesh::SPHERE);
 	m_meshes[BasicMesh::SPHERE] = sphereMesh;
 	collideManager->CalcModelBoundingBox(sphereMesh);
+
+	//Ô²×¶Ìå
+	const float coneHeight = 1.0f;
+	const float coneRadius = 0.5f;
+	const int coneRadiusCount = 20;
+	const float coneRadiusStep = radians(360.0f / coneRadiusCount);
+	const int coneHeightStepCount = 10;
+	const float coneHeightStep = coneHeight / coneHeightStepCount;
+	const float coneTan = coneRadius / coneHeight;
+	vector<Vertex> *coneVertex = new vector<Vertex>();
+	coneVertex->reserve(1 + coneHeightStepCount * coneRadiusCount);
+	//Ô²×¶¼â
+	Vertex v;
+	v.m_position = vec3(0.0f, coneHeight, 0.0f);
+	v.m_normal = vec3(0.0f, 1.0f, 0.0f);
+	v.m_texCoord = vec2(0.5f, 0.5f);
+	coneVertex->push_back(v);
+	//Ô²×¶Ìå
+	for (float y = 0.0f; y < coneHeight; y += coneHeightStep)
+	{
+		v.m_position.y = y;
+		float radius = coneTan * (coneHeight - y);
+		float angle = 0.0f;
+		for (int i = 0; i < coneRadiusCount; i++)
+		{
+			angle += coneRadiusStep;
+			v.m_position.x = radius * cos(angle);
+			v.m_position.z = -radius * sin(angle);
+			coneVertex->push_back(v);
+		}
+	}
+	//Ô²×¶µ×
+	v.m_position = vec3(0.0f, 0.0f, 0.0f);
+	v.m_normal = vec3(0.0f, -1.0f, 0.0f);
+	v.m_texCoord = vec2(0.5f, 0.5f);
+	coneVertex->push_back(v);
+
+	//Ô²×¶·¨Ïß
+	for (int i = 0; i < coneRadiusCount; i++)
+	{
+		Vertex v = (*coneVertex)[1 + i];
+		vec3 d = normalize(v.m_position - (*coneVertex)[0].m_position);
+		float l = dot(d, -(*coneVertex)[0].m_position);
+		vec3 normal = normalize(d * l + (*coneVertex)[0].m_position);
+		for (int j = 0; j < coneRadiusCount; ++j)
+			(*coneVertex)[1 + coneRadius * i + j].m_normal = normal;
+	}
+
+	//Ë÷Òý
+	vector<unsigned int> coneIndex;
+	//¶¥²¿
+	for (int i = 0; i < coneRadiusCount; ++i)
+	{
+		coneIndex.push_back(0);
+		coneIndex.push_back(1 + i);
+		coneIndex.push_back(2 + i);
+	}
+	//ÖÐ¼ä
+	for (int i = 0; i < coneHeightStepCount - 1; ++i)
+	{
+		int startIndex = 1 + i * coneRadiusCount;
+		int j = 0;
+		for (j = 0; j < coneRadiusCount - 1; ++j)
+		{
+			coneIndex.push_back(startIndex + j);
+			coneIndex.push_back(startIndex + j + coneRadiusCount);
+			coneIndex.push_back(startIndex + j + coneRadiusCount + 1);
+			coneIndex.push_back(startIndex + j + coneRadiusCount + 1);
+			coneIndex.push_back(startIndex + j + 1);
+			coneIndex.push_back(startIndex + j);
+		}
+		coneIndex.push_back(startIndex + j);
+		coneIndex.push_back(startIndex + j + coneRadiusCount);
+		coneIndex.push_back(startIndex + j + 1);
+		coneIndex.push_back(startIndex + j + 1);
+		coneIndex.push_back(startIndex);
+		coneIndex.push_back(startIndex + j);
+	}
+	//µ×²¿
+	int coneBottomIndex = coneVertex->size() - 1;
+	const int coneBottomCircleStart = 1;
+	for (int i = 0; i < coneRadiusCount - 1; ++i)
+	{
+		coneIndex.push_back(coneBottomIndex);
+		coneIndex.push_back(coneBottomCircleStart + i);
+		coneIndex.push_back(coneBottomCircleStart + i + 1);
+	}
+	coneIndex.push_back(coneBottomIndex);
+	coneIndex.push_back(1);
+	coneIndex.push_back(2);
+	
+	StaticMesh *coneMesh = new StaticMesh(coneVertex, &vector<Texture*>(), &coneIndex);
+	Model *coneModel = new StaticModel(vector<StaticMesh*>(1, coneMesh), vector<Texture*>());
+	sphereMesh->SetModelID(BasicMesh::CONE);
+	m_meshes[BasicMesh::CONE] = coneModel;
+	collideManager->CalcModelBoundingBox(coneModel);
+
 }
 
 MeshManager * MeshManager::m_instance = nullptr;
