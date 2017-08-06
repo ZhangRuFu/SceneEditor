@@ -4,6 +4,7 @@
 #include "AnimationModelDrawer.h"
 #include "AnimationController.h"
 #include "XSON.h"
+#include "Entity.h"
 
 
 Activity::Activity(string id) : ViewGroup(this, id, ivec2(0, 0), View::Dimension::MATCH_PARENT, View::Dimension::MATCH_PARENT)
@@ -98,9 +99,11 @@ bool ImportModelListener::onMouse(View & view, const Event & e)
 		string path = editText->GetText();
 		SkeletonModel *model = dynamic_cast<SkeletonModel*>(MeshManager::LoadModel(path, "main"));
 		//===============================ÄÚ´æÐ¹Â©=============================
-		Transform *transform = new Transform();
-		AnimationModelDrawer *drawer = AnimationModelDrawer::Create(model, transform);
+		GameEntity *entity = new GameEntity();
+		AnimationModelDrawer *drawer = AnimationModelDrawer::Create(model);
+		entity->AddComponent(*drawer);
 		AnimationController *controller = new AnimationController(drawer, model, "main");
+		entity->AddComponent(*controller);
 		ClipBar *bar = dynamic_cast<ClipBar*>(view.GetActivity()->FindViewByID("clpBar"));
 		bar->SetAnimationController(controller);
 	}

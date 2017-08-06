@@ -15,7 +15,7 @@ public:
 	{
 		m_transform = (Transform*)GetComponent(ComponentType::Transform);
 
-		ModelArg modelArg(BasicMesh::PLANE);
+		ModelArg modelArg(*this, BasicMesh::PLANE);
 		m_model = dynamic_cast<Model*>(AddComponent(modelArg));
 		m_model->AddTexture("E:\\GameDevelop\\Asset\\Texture\\wood2.jpg");
 	}

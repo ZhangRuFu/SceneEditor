@@ -37,9 +37,9 @@ private:
 	void GenDirection(void);
 
 public:
-	Camera(int windowWidth, int windowHeight, Transform transform = Transform(vec3(0, 0, 10)), vec3 front = vec3(0.0, 0.0, -1.0), vec3 up = vec3(0, 1, 0));
+	Camera(int windowWidth, int windowHeight, vec3 front = vec3(0.0, 0.0, -1.0), vec3 up = vec3(0, 1, 0));
 
-	vec3 GetViewPosition(void) { return m_transform->getPosition(); }
+	vec3 GetViewPosition(void) { return m_transform->GetPosition(); }
 	vec3 GetViewFront(void) { return m_front; }
 
 	void Rotate(int deltaX, int deltaY);

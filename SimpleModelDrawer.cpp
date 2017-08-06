@@ -12,13 +12,9 @@ void SimpleModelDrawer::Draw()
 {
 	//Model¾ØÕó
 	mat4 model = m_transform->GetModelMatrix();
-	/*model = translate(model, m_transform->getPosition());
-	vec3 rotation = m_transform->getRotation();
-	model = model * (mat4)eulerAngleXYZ(radians((double)rotation.x), radians((double)rotation.y), radians((double)rotation.z));
-	model = scale(model, m_transform->getScale());*/
 
 	glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, value_ptr(model));
-	glUniform4fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(vec4(m_color, 1.0)));
+	glUniform3fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(m_color));
 
 	int subMeshCount = m_mesh->GetMeshCount();
 	for (int i = 0; i < subMeshCount; i++)
@@ -43,11 +39,10 @@ void SimpleModelDrawer::PublicSet()
 	m_shader->SetUniformValue("projection", projection);
 }
 
-SimpleModelDrawer * SimpleModelDrawer::Create(Model * mesh, Transform * transform, vec3 color)
+SimpleModelDrawer * SimpleModelDrawer::Create(Model * mesh, vec3 color)
 {
-	SimpleModelDrawer *drawer = new SimpleModelDrawer(mesh, transform, color);
+	SimpleModelDrawer *drawer = new SimpleModelDrawer(mesh, color);
 	drawer->LoadGraphicsBuffer(mesh);
-	drawer->Register();
 	return drawer;
 }
 

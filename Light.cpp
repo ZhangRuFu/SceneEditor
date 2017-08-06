@@ -5,7 +5,7 @@
 
 Light::Light(vec3 color) : m_color(color)
 {
-	ModelArg mArg(BasicMesh::CUBE, color);
+	ModelArg mArg(*this, BasicMesh::CUBE, color);
 	AddComponent(mArg);
 	m_isShow = true;
 	ResourceSystem::Register(this);

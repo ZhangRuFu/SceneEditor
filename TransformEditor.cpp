@@ -7,24 +7,26 @@
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
+using std::string;
 
-TranslateAxis::TranslateAxis(void)
+TransformEditor::TransformEditor(void) : GameSpirit("TransformEditor", "TransformEditor")
 {
 	//各坐标轴对象
-	m_xAxis = new TranslateSubAxis(this, Axis::X, vec3(1.0, 0.0, 0.0));
-	m_yAxis = new TranslateSubAxis(this, Axis::Y, vec3(0.0, 1.0, 0.0));
-	m_zAxis = new TranslateSubAxis(this, Axis::Z, vec3(0.0, 0.0, 1.0));
+	m_translateAxis = new TranslateAxis[3]{ TranslateAxis(this, Axis::X, vec3(1.0, 0.0, 0.0)), TranslateAxis(this, Axis::Y, vec3(0.0, 1.0, 0.0)), TranslateAxis(this, Axis::Z, vec3(0.0, 0.0, 1.0))};
+	m_scaleAxis = new ScaleAxis[3]{ ScaleAxis(this, Axis::X, vec3(1.0, 0.0, 0.0)), ScaleAxis(this, Axis::Y, vec3(0.0, 1.0, 0.0)), ScaleAxis(this, Axis::Z, vec3(0.0, 0.0, 1.0)) };
 	
-	m_transform->AttachChild(m_xAxis->GetTransform());
-	m_transform->AttachChild(m_yAxis->GetTransform());
-	m_transform->AttachChild(m_zAxis->GetTransform());
-
-	m_xAxis->SetAxisLen(m_axisLen);
-	m_yAxis->SetAxisLen(m_axisLen);
-	m_zAxis->SetAxisLen(m_axisLen);
+	for (int i = 0; i < 3; ++i)
+	{
+		m_translateAxis[i].Disable();
+		m_scaleAxis[i].Disable();
+		m_transform->AttachChild(m_translateAxis[i].GetTransform());
+		m_transform->AttachChild(m_scaleAxis[i].GetTransform());
+		m_translateAxis[i].SetAxisLen(m_axisLen);
+		m_scaleAxis[i].SetAxisLen(m_axisLen);
+	}
 
 	//坐标轴线段
-	LineDrawer *axisLine = LineDrawer::Create(m_transform);
+	LineDrawer *axisLine = new LineDrawer();
 	vec3 origin = vec3(0, 0, 0);
 	axisLine->AddVertex(origin);
 	axisLine->AddVertex(m_axisLen * vec3(1.0, 0.0, 0.0));
@@ -33,85 +35,160 @@ TranslateAxis::TranslateAxis(void)
 	axisLine->AddVertex(origin);
 	axisLine->AddVertex(m_axisLen * vec3(0.0, 0.0, 1.0));
 	AddComponent(*axisLine);
+
+	ChangeType(TransformEditorType::Translate);
+	ChangeType(TransformEditorType::Scale);
+	m_transform->ChangeModelMatrixCalcType(Transform::ModelMatrixType::Translate | Transform::ModelMatrixType::Rotation | Transform::ModelMatrixType::EXCEPTTOP);
 }
 
-void TranslateAxis::setTargetTransform(Transform * transform)
+void TransformEditor::SetTargetTransform(Transform * transform)
 {	
 	m_targetTransform = transform;
 	transform->AttachChild(GetTransform());
-	m_xAxis->Active();
-	m_yAxis->Active();
-	m_zAxis->Active();
+	Enable();
+	for (int i = 0; i < 3; ++i)
+		m_curentAxis[i].Enable();
 }
 
-void TranslateAxis::ReleaseTarget(void)
+void TransformEditor::ReleaseTarget(void)
 {
+	Disable();
 	m_targetTransform = nullptr;
-	m_xAxis->Invalid();
-	m_yAxis->Invalid();
-	m_zAxis->Invalid();
+	for (int i = 0; i < 3; ++i)
+		m_curentAxis[i].Disable();
+}
+
+void TransformEditor::Hit(GameEntity &axis)
+{
+	TransformAxis *transformAxis = dynamic_cast<TransformAxis*>(&axis);
+	if (transformAxis)
+		transformAxis->Hit();
+}
+
+void TransformEditor::ChangeType(TransformEditorType type)
+{
+	m_type = type;
+	switch (type)
+	{
+	case TransformEditor::TransformEditorType::Translate:
+		m_curentAxis = m_translateAxis;
+		break;
+	case TransformEditor::TransformEditorType::Rotate:
+		//===========================================================================================================================
+		break;
+	case TransformEditor::TransformEditorType::Scale:
+		m_curentAxis = m_scaleAxis;
+		break;
+	}
 }
 
 
-TranslateSubAxis::TranslateSubAxis(TranslateAxis *originAxis, Axis axis, vec3 color) : m_axis(originAxis)
+
+TranslateAxis::TranslateAxis(TransformEditor *originAxis, Axis axis, vec3 color) : TransformAxis(originAxis, axis, "TranslateAxis")
+{
+	switch (axis)
+	{
+	case Axis::X:
+		m_transform->Rotate(Axis::Z, -90.0f);
+		break;
+	case Axis::Z:
+		m_transform->Rotate(Axis::X, 90.0f);
+		break;
+	}
+	ModelArg arg(*this, BasicMesh::CONE, color);
+	AddComponent(arg);
+	m_transform->ChangeModelMatrixCalcType(Transform::ModelMatrixType::Translate | Transform::ModelMatrixType::EXCEPTTOP);
+}
+
+
+void TranslateAxis::Move(void)
+{
+	if (!m_isHit)
+		return;
+	if (InputSystem::isMouseKeyDown(MOUSE_KEY_LEFT))
+	{
+		ivec2 mousePoint;
+		InputSystem::GetMousePosition(mousePoint.x, mousePoint.y);
+
+		float wlen = ScreenToWorldLen(m_hitScreenPoint, mousePoint);
+		m_axis->TranslateTarget(wlen * m_direction);
+		InputSystem::GetMousePosition(m_hitScreenPoint.x, m_hitScreenPoint.y);
+	}
+	else
+		m_isHit = false;
+}
+
+
+ScaleAxis::ScaleAxis(TransformEditor * originAxis, Axis axis, vec3 color) : TransformAxis(originAxis, axis, "ScaleAxis")
+{
+	ModelArg arg(*this, BasicMesh::CUBE, color);
+	m_transform->ChangeModelMatrixCalcType(Transform::ModelMatrixType::Translate | Transform::ModelMatrixType::EXCEPTTOP);
+	m_transform->SetScale(vec3(0.3));
+	AddComponent(arg);
+}
+
+void ScaleAxis::Move(void)
+{
+	if (!m_isHit)
+		return;
+	if (InputSystem::isMouseKeyDown(MOUSE_KEY_LEFT))
+	{
+		ivec2 mousePoint;
+		InputSystem::GetMousePosition(mousePoint.x, mousePoint.y);
+
+		float wlen = ScreenToWorldLen(m_hitScreenPoint, mousePoint);
+		m_axis->ScaleTarget(wlen * m_direction);
+		InputSystem::GetMousePosition(m_hitScreenPoint.x, m_hitScreenPoint.y);
+	}
+	else
+		m_isHit = false;
+}
+
+
+
+TransformAxis::TransformAxis(TransformEditor * originAxis, Axis axis, const string name) : m_axis(originAxis), GameSpirit(name, "TransformEditor")
 {
 	switch (axis)
 	{
 	case Axis::X:
 		m_direction = vec3(1.0f, 0.0f, 0.0f);
-		m_transform->Rotate(Axis::Z, -90.0f);
 		break;
 	case Axis::Y:
 		m_direction = vec3(0.0f, 1.0f, 0.0f);
 		break;
 	case Axis::Z:
 		m_direction = vec3(0.0f, 0.0f, 1.0f);
-		m_transform->Rotate(Axis::X, 90.0f);
 		break;
 	}
-	ModelArg arg(BasicMesh::CONE, color);
-	AddComponent(arg);
 }
 
-void TranslateSubAxis::SetAxisLen(float len)
+void TransformAxis::SetAxisLen(float len)
 {
 	m_transform->Move(len * m_direction);
 }
 
-void TranslateSubAxis::Hit(void)
+void TransformAxis::Hit(void)
 {
 	m_isHit = true;
 	InputSystem::GetMousePosition(m_hitScreenPoint.x, m_hitScreenPoint.y);
 }
 
-void TranslateSubAxis::Move(void)
+float TransformAxis::ScreenToWorldLen(const ivec2 &originScreenPoint, const ivec2 &destScreenPoint)
 {
-	if (!m_isActive)
-		return;
-	if (!m_isHit)
-		return;
-	if (InputSystem::isMouseKeyDown(MOUSE_KEY_LEFT))
-	{
-		vec3 origin;
-		mat4 originModel = m_transform->getFatherTransform()->GetModelMatrix();
-		origin = vec3(originModel * vec4(origin, 1.0f));
-		vec3 axis = m_direction;
-		axis = vec3(originModel * vec4(axis, 1.0f));
-		vec2 so = ResourceSystem::GetMainCamera()->WorldToScreenPoint(origin);
-		vec2 sa = ResourceSystem::GetMainCamera()->WorldToScreenPoint(axis);
-		float slen = abs(length(sa - so));
-		vec2 sd = glm::normalize(sa - so);
+	vec3 origin;
+	mat4 originModel = m_transform->getFatherTransform()->GetModelMatrix();
+	origin = vec3(originModel * vec4(origin, 1.0f));
+	vec3 axis = m_direction;
+	axis = vec3(originModel * vec4(axis, 1.0f));
+	vec2 so = ResourceSystem::GetMainCamera()->WorldToScreenPoint(origin);
+	vec2 sa = ResourceSystem::GetMainCamera()->WorldToScreenPoint(axis);
+	float slen = abs(length(sa - so));
+	vec2 sd = glm::normalize(sa - so);
 
-		ivec2 mousePoint;
-		InputSystem::GetMousePosition(mousePoint.x, mousePoint.y);
-		vec2 mouseVector = mousePoint - m_hitScreenPoint;
+	vec2 mouseVector = destScreenPoint - originScreenPoint;
 
-		//屏幕上的len要还原到世界空间中的len
-		float len = glm::dot(mouseVector, sd);
-		float wlen = 1 / slen * len;
-		m_axis->TranslateTarget(wlen * m_direction);
-		InputSystem::GetMousePosition(m_hitScreenPoint.x, m_hitScreenPoint.y);
-	}
-	else
-		m_isHit = false;
+	//屏幕上的len要还原到世界空间中的len
+	float len = glm::dot(mouseVector, sd);
+	float wlen = 1 / slen * len;
+	return wlen;
 }

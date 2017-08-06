@@ -9,7 +9,9 @@ using std::map;
 
 class Shader;
 class RenderMode;
+class Transform;
 struct GraphicsBuffer;
+
 
 /*
 *
@@ -64,9 +66,13 @@ class ModelDrawer : public Drawer
 private:
 	static map<int, GraphicsBuffer*> m_buffersMap;
 
+protected:
+	Transform *m_transform = nullptr;
+
 public:
 	ModelDrawer(Model *mesh, string shaderName);
 
+	virtual void SetEntity(GameEntity &entity);
 	virtual void Draw() = 0;
 	virtual void PublicSet() = 0;
 	virtual int GetComponentType(void) = 0;

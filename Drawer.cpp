@@ -2,6 +2,7 @@
 #include "RenderSystem.h"
 #include "Model.h"
 #include "RenderMode.h"
+#include "Entity.h"
 
 Drawer::Drawer(string shaderName)
 {
@@ -46,6 +47,14 @@ void Drawer::ResetRenderMode(void)
 ModelDrawer::ModelDrawer(Model * mesh, string shaderName) : Drawer(shaderName)
 {
 	ChangeRenderLevel(RenderLevel::Entity);
+}
+
+void ModelDrawer::SetEntity(GameEntity & entity)
+{
+	Component::SetEntity(entity);
+	m_transform = entity.GetTransform();
+
+	Register();
 }
 
 void ModelDrawer::AddModelBuffer(Model * model, GraphicsBuffer * gb)

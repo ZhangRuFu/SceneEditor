@@ -92,10 +92,11 @@ Component * ModelArg::CreateComponent(void)
 		 modelCom = dynamic_cast<Model*>(MeshManager::LoadModel(m_modelPath));
 		 int type = modelCom->GetComponentType();
 		 if (type == (int)ComponentType::Mesh::StaticMesh)
-			 AddComponent(StaticModelDrawer::Create(modelCom, transform));
+			 AddComponent(StaticModelDrawer::Create(modelCom));
 		 else if (type == (int)ComponentType::Mesh::SkeletonMesh)
 		 {
-			 AnimationModelDrawer*drawer = dynamic_cast<AnimationModelDrawer*>(AddComponent(AnimationModelDrawer::Create(modelCom, transform)));
+			 AnimationModelDrawer*drawer = AnimationModelDrawer::Create(modelCom);
+			 AddComponent(drawer);
 			 AddComponent(new AnimationController(drawer, (SkeletonModel*)modelCom));
 		 }
 	}
@@ -104,9 +105,9 @@ Component * ModelArg::CreateComponent(void)
 		//基本内置模型
 		modelCom = MeshManager::LoadModel(m_basicMesh);
 		if (m_modelConfig & ModelConfig::PURECOLOR)
-			AddComponent(SimpleModelDrawer::Create(modelCom, transform, m_color));
+			AddComponent(SimpleModelDrawer::Create(modelCom, m_color));
 		else
-			AddComponent(StaticModelDrawer::Create(modelCom, transform));
+			AddComponent(StaticModelDrawer::Create(modelCom));
 	}
 	else
 	{

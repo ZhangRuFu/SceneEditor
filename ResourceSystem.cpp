@@ -75,10 +75,16 @@ void ResourceSystem::Init()
 void ResourceSystem::Move()
 {
 	for (list<AnimationController*>::iterator i = m_animationControllers.begin(); i != m_animationControllers.end(); i++)
-		(*i)->Move();
+	{
+		if ((*i)->IsEnable())
+			(*i)->Move();
+	}
 
 	for (list<GameSpirit*>::iterator i = m_spiritList.begin(); i != m_spiritList.end(); i++)
-		(*i)->Move();
+	{
+		if ((*i)->IsEnable())
+			(*i)->Move();
+	}
 }
 
 Camera * ResourceSystem::GetMainCamera()

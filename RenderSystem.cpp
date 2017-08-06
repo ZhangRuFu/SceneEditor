@@ -92,18 +92,23 @@ void RenderSystem::Draw()
 		list<Drawer*> &drawerList = m_renderList[i].m_drawerList;
 		for (list<Drawer*>::iterator iterator = drawerList.begin(); iterator != drawerList.end(); iterator++)
 		{
+			//=====================================PublicSet多次！=============================================
+			if (iterator == drawerList.begin())
+				(*iterator)->PublicSet();
+
+			if (!(*iterator)->IsEnable())
+				continue;
+
 			if ((*iterator)->GetRenderLevel() == RenderLevel::AfterEntity)
 			{
 				afterEntity.push_back(*iterator);
 				continue;
 			}
+
 			needSetRenderMode = (*iterator)->NeedSetRenderMode();
 			if (needSetRenderMode)
 				(*iterator)->SetRenderMode();
-
-			//=====================================PublicSet多次！=============================================
-			if (iterator == drawerList.begin())
-				(*iterator)->PublicSet();
+			
 			(*iterator)->Draw();
 
 			if (needSetRenderMode)

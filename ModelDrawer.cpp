@@ -8,14 +8,22 @@
 #include "ResourceSystem.h"
 #include "ModelDrawer.h"
 
+StaticModelDrawer::StaticModelDrawer(Model * mesh, string shaderName) : ModelDrawer(mesh, shaderName)
+{
+	m_mesh = dynamic_cast<StaticModel*>(mesh);
+	if (m_mesh == nullptr)
+		throw std::exception("StatcModelDrawer构造函数：mesh无法转换");
+	m_buffers = nullptr;
+}
+
 void StaticModelDrawer::Draw()
 {
 	//Model矩阵
 	mat4 model = m_transform->GetModelMatrix();
-	/*model = translate(model, m_transform->getPosition());
-	vec3 rotation = m_transform->getRotation();
+	/*model = translate(model, m_transform->GetPosition());
+	vec3 rotation = m_transform->GetRotation();
 	model = model * (mat4)eulerAngleXYZ(radians((double)rotation.x), radians((double)rotation.y), radians((double)rotation.z));
-	model = scale(model, m_transform->getScale());*/
+	model = scale(model, m_transform->GetScale());*/
 
 	GLenum modelLocation = m_shader->GetUniformLocation("model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(model));
@@ -67,7 +75,7 @@ void StaticModelDrawer::PublicSet()
 	vec3 viewerPosition = camera->GetViewPosition();
 	Light *light = ResourceSystem::GetLight();
 	vec3 lightColor = light->GetLightColor();
-	vec3 lightPosition = light->GetTransform()->getPosition();
+	vec3 lightPosition = light->GetTransform()->GetPosition();
 
 	glUniform3fv(m_shader->GetUniformLocation("viewerPosition"), 1, value_ptr(viewerPosition));
 	glUniform3fv(m_shader->GetUniformLocation("lightColor"), 1, value_ptr(lightColor));
@@ -77,11 +85,10 @@ void StaticModelDrawer::PublicSet()
 	m_shader->SetUniformValue("projection", projection);
 }
 
-StaticModelDrawer * StaticModelDrawer::Create(Model * mesh, Transform * transform)
+StaticModelDrawer * StaticModelDrawer::Create(Model * mesh)
 {
-	StaticModelDrawer *drawer = new StaticModelDrawer(mesh, transform);
+	StaticModelDrawer *drawer = new StaticModelDrawer(mesh);
 	drawer->LoadGraphicsBuffer(mesh);
-	drawer->Register();
 	return drawer;
 }
 

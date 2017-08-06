@@ -20,15 +20,9 @@ class StaticModelDrawer : public ModelDrawer
 {
 protected:
 	StaticModel *m_mesh;
-	Transform *m_transform;
 
 protected:
-	StaticModelDrawer(Model *mesh, Transform *transform, string shaderName = "AssimpModel") : ModelDrawer(mesh, shaderName)
-	{
-		m_mesh = dynamic_cast<StaticModel*>(mesh);
-		m_transform = transform;
-		m_buffers = nullptr;
-	}
+	StaticModelDrawer(Model *mesh, string shaderName = "AssimpModel");
 
 public:
 	virtual void Draw();
@@ -36,5 +30,5 @@ public:
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::ModelDrawer; }
 	virtual GraphicsBuffer* LoadGraphicsBuffer(Model *mesh);
 
-	static StaticModelDrawer* Create(Model *mesh, Transform *transform);
+	static StaticModelDrawer* Create(Model *mesh);
 };

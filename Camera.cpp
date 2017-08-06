@@ -3,10 +3,8 @@
 #include "Camera.h"
 #include "CommonType.h"
 
-Camera::Camera(int windowWidth, int windowHeight, Transform transform, vec3 front, vec3 up) : m_front(front), m_up(up)
+Camera::Camera(int windowWidth, int windowHeight, vec3 front, vec3 up) : m_front(front), m_up(up)
 {
-	*m_transform = transform;
-
 	m_windowWidth = windowWidth;
 	m_windowHeight = windowHeight;
 
@@ -67,7 +65,7 @@ void Camera::Translate(Direction direction)
 
 mat4 Camera::GenViewMatrix()
 {
-	return lookAt(m_transform->getPosition(), m_transform->getPosition() + m_front, m_up);
+	return lookAt(m_transform->GetPosition(), m_transform->GetPosition() + m_front, m_up);
 }
 
 mat4 Camera::GenProjectionMatrix()
@@ -82,7 +80,7 @@ mat4 Camera::GenWindowProjectionMatrix(float nearZ, float farZ)
 
 Ray Camera::ScreenPointToRay(ivec2 &screenPoint)
 {
-	vec3 centerPoint = m_transform->getPosition() + m_near * m_front;		//近平面中心点
+	vec3 centerPoint = m_transform->GetPosition() + m_near * m_front;		//近平面中心点
 	
 	vec3 right = normalize(glm::cross(m_up, -m_front));
 	vec3 up = normalize(glm::cross(-m_front, right));
@@ -90,10 +88,10 @@ Ray Camera::ScreenPointToRay(ivec2 &screenPoint)
 	vec3 screenVector = (m_nearH / 2) / screenCenter.y * vec3(screenPoint.x - screenCenter.x, screenCenter.y - screenPoint.y, 0.0);
 	//vec3 screenVector = vec3(m_nearW * ((screenPoint.x - screenCenter.x) / screenCenter.x), m_nearH * ((screenPoint.y / screenCenter.y) / screenCenter.y), 0);	//屏幕中心到点击点的向量,缩放到近平面
 	vec3 nearPoint = centerPoint + right * screenVector.x + up * screenVector.y;
-	vec3 rayDirection = normalize(nearPoint - m_transform->getPosition());
+	vec3 rayDirection = normalize(nearPoint - m_transform->GetPosition());
 	Ray ray;
 	ray.setDirection(rayDirection);
-	ray.setOrigin(m_transform->getPosition());
+	ray.setOrigin(m_transform->GetPosition());
 
 	return ray;
 }

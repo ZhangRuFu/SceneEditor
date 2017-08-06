@@ -12,6 +12,7 @@
 class Model;
 class Ray;
 class RaycastHit;
+class GameEntity;
 using glm::vec3;
 //----------------------------------------------------------------------------------------------------------------
 
@@ -25,18 +26,12 @@ using glm::vec3;
 
 class Collider : public Component
 {
-private:
-	GameEntity *m_entity = nullptr;
-
 protected:
 	Transform *m_transform;
 
 public:
-	Collider(Transform *transform) : m_transform(transform) {}
-
-	void SetEntity(GameEntity *entity);
-	GameEntity* GetEntity(void) const { return m_entity; }
 	const Transform* getTransform(void) const { return m_transform; }
+	virtual void SetEntity(GameEntity &entity);
 	
 	virtual void CalcModelBoundingBox(Model *model) = 0;
 	virtual int GetComponentType(void) = 0;
@@ -61,19 +56,17 @@ private:
 	float m_radius;		//°ë¾¶
 
 public:
-	SphereCollider(Transform *transform) : Collider(transform) {}
-
 	//Setter & Getter
-	void setCenter(vec3 center) { m_center = center; }
-	void setRadius(float radius) { m_radius = radius; }
-	vec3 getCenter(void) const { return m_center; }
-	float getRadius(void) const { return m_radius; }
+	void SetCenter(vec3 center) { m_center = center; }
+	void SetRadius(float radius) { m_radius = radius; }
+	vec3 GetCenter(void) const { return m_center; }
+	float GetRadius(void) const { return m_radius; }
 
 	virtual void CalcModelBoundingBox(Model *model);
 	virtual int GetComponentType(void) { return (int)ComponentType::Collider::ShpereCollider; }
 	virtual bool RayCast(const Ray & ray, RaycastHit * hitInfo, float len);
 
-	vec3 getWorldCenter(void) const;
+	vec3 GetWorldCenter(void) const;
 };
 
 

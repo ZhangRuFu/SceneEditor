@@ -24,7 +24,7 @@ void CollideManager::CalcModelBoundingBox(Model * model)
 	int modelID = model->GetModelID();
 	if (m_modelBoundingMap.find(modelID) == m_modelBoundingMap.end())
 	{
-		Collider *collider = new SphereCollider(nullptr);
+		Collider *collider = new SphereCollider();
 		collider->CalcModelBoundingBox(model);
 		m_modelBoundingMap[modelID] = collider;
 	}
@@ -40,8 +40,8 @@ void CollideManager::Register(GameEntity * entity)
 	if (m_modelBoundingMap.find(id) != m_modelBoundingMap.end())
 	{
 		SphereCollider *collider = new SphereCollider(*(SphereCollider*)m_modelBoundingMap[id]);
-		collider->SetEntity(entity);
-		entity->GetComponentManager()->AddComponent(collider);
+		collider->SetEntity(*entity);
+		entity->AddComponent(*collider);
 		m_colliders.push_back(collider);
 
 		//可视化碰撞体
@@ -64,7 +64,7 @@ bool CollideManager::RayCast(const Ray &ray, RaycastHit * hitInfo, float len)
 bool CollideManager::_RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
 {
 	for (list<Collider*>::iterator i = m_colliders.begin(); i != m_colliders.end(); i++)
-		if((*i)->RayCast(ray, hitInfo, len))
+		if ((*i)->IsEnable() && (*i)->RayCast(ray, hitInfo, len))
 			return true;
 }
 

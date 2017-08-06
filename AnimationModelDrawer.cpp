@@ -1,4 +1,3 @@
-#include "AnimationModelDrawer.h"
 #include <GLM\glm.hpp>
 #include <GLM\gtx\transform.hpp>
 #include <GLM\gtx\euler_angles.hpp>
@@ -6,6 +5,16 @@
 #include "Camera.h"
 #include "ResourceSystem.h"
 #include "Model.h"
+#include "Transform.h"
+#include "AnimationModelDrawer.h"
+
+AnimationModelDrawer::AnimationModelDrawer(Model * model, string shaderName) : ModelDrawer(model, shaderName)
+{
+	m_model = dynamic_cast<SkeletonModel*>(model);
+	if (m_model == nullptr)
+		throw std::exception("AnimationModelDrawer构造函数：model为nullptr");
+	m_boneTransform = nullptr;
+}
 
 void AnimationModelDrawer::PublicSet()
 {
@@ -15,7 +24,7 @@ void AnimationModelDrawer::PublicSet()
 	vec3 viewerPosition = camera->GetViewPosition();
 	Light *light = ResourceSystem::GetLight();
 	vec3 lightColor = light->GetLightColor();
-	vec3 lightPosition = light->GetTransform()->getPosition();
+	vec3 lightPosition = light->GetTransform()->GetPosition();
 
 	glUniform3fv(m_shader->GetUniformLocation("viewerPosition"), 1, value_ptr(viewerPosition));
 	glUniform3fv(m_shader->GetUniformLocation("lightColor"), 1, value_ptr(lightColor));
@@ -25,11 +34,10 @@ void AnimationModelDrawer::PublicSet()
 	m_shader->SetUniformValue("projection", projection);
 }
 
-AnimationModelDrawer * AnimationModelDrawer::Create(Model * model, Transform * transform)
+AnimationModelDrawer * AnimationModelDrawer::Create(Model * model)
 {
-	AnimationModelDrawer *drawer = new AnimationModelDrawer(model, transform);
+	AnimationModelDrawer *drawer = new AnimationModelDrawer(model);
 	drawer->LoadGraphicsBuffer(model);
-	drawer->Register();
 	return drawer;
 }
 
@@ -85,21 +93,14 @@ GraphicsBuffer * AnimationModelDrawer::LoadGraphicsBuffer(Model * model)
 	return m_buffers;
 }
 
-AnimationModelDrawer::AnimationModelDrawer(Model * model, Transform * transform, string shaderName) : ModelDrawer(model, shaderName)
-{
-	m_model = dynamic_cast<SkeletonModel*>(model);
-	m_transform = transform;
-	m_boneTransform = nullptr;
-}
-
 void AnimationModelDrawer::Draw()
 {
 	//Model矩阵
 	mat4 model = m_transform->GetModelMatrix();
-	/*model = translate(model, m_transform->getPosition());
-	vec3 rotation = m_transform->getRotation();
+	/*model = translate(model, m_transform->GetPosition());
+	vec3 rotation = m_transform->GetRotation();
 	model = model * (mat4)eulerAngleXYZ(radians((double)rotation.x), radians((double)rotation.y), radians((double)rotation.z));
-	model = scale(model, m_transform->getScale());*/
+	model = scale(model, m_transform->GetScale());*/
 
 	GLenum modelLocation = m_shader->GetUniformLocation("model");
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(model));

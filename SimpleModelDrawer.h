@@ -18,10 +18,7 @@ private:
 	vec3 m_color;
 
 protected:
-	SimpleModelDrawer(Model *mesh, Transform *transform, vec3 color, string shaderName = "SimpleModel") : StaticModelDrawer(mesh, transform, shaderName), m_color(color)
-	{
-
-	}
+	SimpleModelDrawer(Model *mesh, vec3 color, string shaderName = "SimpleModel") : StaticModelDrawer(mesh, shaderName), m_color(color) {}
 
 public:
 	virtual void Draw();
@@ -29,7 +26,7 @@ public:
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::SimpleModelDrawer; }
 	virtual GraphicsBuffer* LoadGraphicsBuffer(Model *mesh);
 
-	static SimpleModelDrawer* Create(Model *mesh, Transform *transform, vec3 color);
+	static SimpleModelDrawer* Create(Model *mesh, vec3 color);
 
 	vec3 GetColor(void) const { return m_color; };
 };

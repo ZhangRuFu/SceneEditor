@@ -17,7 +17,7 @@ class Soldier : public GameSpirit
 public:
 	Soldier(void)
 	{
-		ModelArg mArg("E:\\GameDevelop\\Model\\nanosuit\\nanosuit.obj");
+		ModelArg mArg(*this, "E:\\GameDevelop\\Model\\nanosuit\\nanosuit.obj");
 		AddComponent(mArg);
 	}
 

@@ -7,13 +7,14 @@
 #include "RenderSystem.h"
 #include "ResourceSystem.h"
 #include "ColliderModelDrawer.h"
+#include "Transform.h"
 
 void ColliderModelDrawer::Draw()
 {
 	//Model¾ØÕó
 	mat4 model;
-	model = translate(model, m_collider->getCenter());
-	model = scale(model, vec3(m_collider->getRadius()));
+	model = translate(model, m_collider->GetCenter());
+	model = scale(model, vec3(m_collider->GetRadius()));
 	model = m_transform->GetModelMatrix() * model;
 
 	glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, value_ptr(model));

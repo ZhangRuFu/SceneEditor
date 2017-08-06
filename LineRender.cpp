@@ -2,8 +2,9 @@
 #include "Camera.h"
 #include "ResourceSystem.h"
 #include "Shader.h"
+#include "Entity.h"
 
-LineDrawer::LineDrawer(Transform *transform) : m_transform(transform), Drawer("empty")
+LineDrawer::LineDrawer(void) : Drawer("empty")
 {
 	ChangeRenderLevel(RenderLevel::Entity);
 
@@ -24,6 +25,13 @@ LineDrawer::LineDrawer(Transform *transform) : m_transform(transform), Drawer("e
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+}
+
+void LineDrawer::SetEntity(GameEntity & entity)
+{
+	Component::SetEntity(entity);
+	m_transform = entity.GetTransform();
+	Register();
 }
 
 void LineDrawer::Draw()

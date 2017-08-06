@@ -15,10 +15,9 @@ private:
 	bool m_isChanged = false;
 	Transform *m_transform;
 
-protected:
-	LineDrawer(Transform *transform);
-
 public:
+	LineDrawer(void);
+	virtual void SetEntity(GameEntity &entity);
 	virtual void Draw();
 	virtual void PublicSet();
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::LineDrawer; }
@@ -27,5 +26,4 @@ public:
 	void setDestination(vec3 dest);
 	void SetRay(const Ray &ray, float len);
 	void AddVertex(vec3 position);
-	static LineDrawer* Create(Transform *transform = nullptr) { LineDrawer *instance = new LineDrawer(transform);instance->Register();return instance; }
 };

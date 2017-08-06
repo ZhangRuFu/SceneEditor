@@ -74,9 +74,23 @@ namespace ComponentType
 *	描　　述：组件基类
 *
 */
+class GameEntity;
 class Component
 {
+private:
+	bool m_isEnable = false;			//设置属主后才会为true
+	GameEntity *m_entity = nullptr;
+
 public:
+	Component(void) {}
+
+	bool IsEnable(void) const;
+	void Enable(void) { m_isEnable = true; }
+	void Disable(void) { m_isEnable = false; }
+
+	GameEntity* GetEntity(void) const { return m_entity; }
+	virtual void SetEntity(GameEntity &entity);
+
 	virtual int GetComponentType(void) = 0;
 };
 
@@ -89,22 +103,22 @@ public:
 *	描　　述：组件管理器，对组件进行容纳、查询、删除等动态操作，是组件式引擎的基石
 *
 */
+class ComponentArg;
 class ComponentManager
 {
-	friend class ComponentArg;
-	friend class CollideManager;
-	friend class GameEntity;
-
 private:
+	GameEntity *m_entity = nullptr;
 	list<Component*> m_component;
 
-
 public:
+	ComponentManager(GameEntity &entity);
 	Component* AddComponent(ComponentArg &arg);
 	Component* AddComponent(Component *com);
 	Component* GetComponent(int type);
 
 };
+
+
 
 /*
 *	引擎版本：Dragon Engine v0.1;
@@ -112,20 +126,15 @@ public:
 *	描　　述：所有组件参数的基类，用于创建组件时给与的创建参数
 *
 */
-
-
 class ComponentArg
-{
-private:
-	ComponentManager *m_com;
-
+{	
 protected:
-	Component* AddComponent(Component *com) { return m_com->AddComponent(com); }
-	Component* GetComponent(int type) { return m_com->GetComponent(type); }
+	GameEntity *m_entity;
+	Component* AddComponent(Component *com);
+	Component* GetComponent(int type);
 
 public:
+	ComponentArg(GameEntity &entity) : m_entity(&entity) {}
+
 	virtual Component* CreateComponent(void) = 0;
-
-	void SetComponentManager(ComponentManager *cm) { m_com = cm; }
-
 };

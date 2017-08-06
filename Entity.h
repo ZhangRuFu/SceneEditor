@@ -1,6 +1,8 @@
 #pragma once
+#include <string>
 #include "Transform.h"
 #include "ComponentManager.h"
+
 
 /*
 *	ÒýÇæ°æ±¾£º	Dragon Engine v0.1;
@@ -13,6 +15,9 @@ class GameEntity
 {
 private:
 	ComponentManager m_com;
+	std::string m_name;
+	std::string m_tag;
+	bool m_isEnable = true;
 
 protected:
 	Transform *m_transform;
@@ -22,8 +27,18 @@ public:
 	Component* AddComponent(Component &com) { return m_com.AddComponent(&com); }
 	Component* GetComponent(int type) { return m_com.GetComponent(type); }
 	ComponentManager* GetComponentManager(void) { return &m_com; }
-	Transform* GetTransform(void) { return m_transform; }
-	GameEntity();
+
+	const std::string& GetName(void) const { return m_name; }
+	void SetName(const std::string &name) { m_name = name; }
+	const std::string& GetTag(void) const { return m_tag; }
+	void SetTag(const std::string &tag) { m_tag = tag; }
+
+	bool IsEnable(void) const { return m_isEnable; }
+	void Enable(void) { m_isEnable = true; }
+	void Disable(void) { m_isEnable = false; }
+
+	Transform* GetTransform(void) const { return m_transform; }
+	GameEntity(std::string name = "noname", std::string tag = "default");
 	virtual ~GameEntity(void) {}
 };
 
@@ -38,7 +53,7 @@ class GameSpirit : public GameEntity
 {
 
 public:
-	GameSpirit(void);
+	GameSpirit(std::string name = "noname", std::string tag = "default");
 
 public:
 	virtual void Move() = 0;

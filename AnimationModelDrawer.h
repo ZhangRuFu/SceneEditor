@@ -5,9 +5,9 @@
 *	Ãè¡¡¡¡Êö£º¼Ì³Ð×ÔDrawer£¬ÊÊÓÃÓÚ¹Ç÷À¶¯»­µÄäÖÈ¾Æ÷
 *
 */
-#include "Drawer.h"
-#include "Transform.h"
 #include <map>
+#include <GLM\glm.hpp>
+#include "Drawer.h"
 
 class SkeletonModel;
 class Model;
@@ -18,19 +18,18 @@ class AnimationModelDrawer : public ModelDrawer
 {
 private:
 	SkeletonModel *m_model;
-	Transform *m_transform;
-	vector<mat4> *m_boneTransform;
+	vector<glm::mat4> *m_boneTransform;
 
 protected:
-	AnimationModelDrawer(Model *model, Transform *transform, string shaderName = "AnimationModel");
+	AnimationModelDrawer(Model *model, string shaderName = "AnimationModel");
 
 public:
-	void UpdateBoneTransform(vector<mat4> *boneTransform) { m_boneTransform = boneTransform; }
+	void UpdateBoneTransform(vector<glm::mat4> *boneTransform) { m_boneTransform = boneTransform; }
 
 	virtual void Draw(void);
 	virtual void PublicSet(void);
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::AnimationModelDrawer; }
 	virtual GraphicsBuffer* LoadGraphicsBuffer(Model *model);
 
-	static AnimationModelDrawer* Create(Model *model, Transform *transform);
+	static AnimationModelDrawer* Create(Model *model);
 };

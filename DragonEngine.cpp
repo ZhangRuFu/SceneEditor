@@ -72,9 +72,8 @@ void DragonEngine::Init()
 	Camera *m_camera = new Camera(frameWidth, frameHeight);
 	Soldier *soldier = new Soldier();
 	soldier->GetTransform()->Move(vec3(10, 10, 0));
-	TranslateAxis *axis = new TranslateAxis();
 	
-	Picker *picker = new Picker(axis);
+	Picker *picker = new Picker();
 	//WoodPlane *woodPlane = new WoodPlane();
 	Light *light = new Light();
 	light->GetTransform()->Move(vec3(20, 20, 20));

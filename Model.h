@@ -26,6 +26,7 @@ class SphereCollider;
 *	描　　述：模型类的抽象基类
 *
 */
+//无属主概念，该组件共享
 
 class Model : public Component
 {
@@ -66,10 +67,10 @@ class ModelArg : public ComponentArg
 	
 
 public:
-	ModelArg(string modelPath) : m_modelPath(modelPath), m_modelConfig(0) { m_modelConfig = NORMALMESH; }
-	ModelArg(BasicMesh basicMesh) : m_basicMesh(basicMesh), m_modelConfig(0) { m_modelConfig = BASICMESH; }
-	ModelArg(BasicMesh basicMesh, vec3 color) : m_basicMesh(basicMesh), m_color(color), m_modelConfig(0) { m_modelConfig = BASICMESH | PURECOLOR; }
-	ModelArg(SphereCollider*collider, vec3 color) : m_basicMesh(BasicMesh::SPHERE), m_collider(collider), m_color(color), m_modelConfig(0) { m_modelConfig = COLLIDERMODEL; }
+	ModelArg(GameEntity &entity, string modelPath) : m_modelPath(modelPath), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = NORMALMESH; }
+	ModelArg(GameEntity &entity, BasicMesh basicMesh) : m_basicMesh(basicMesh), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH; }
+	ModelArg(GameEntity &entity, BasicMesh basicMesh, vec3 color) :  m_basicMesh(basicMesh), m_color(color), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH | PURECOLOR; }
+	ModelArg(GameEntity &entity, SphereCollider*collider, vec3 color) : m_basicMesh(BasicMesh::SPHERE), m_collider(collider), m_color(color), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = COLLIDERMODEL; }
 
 	virtual Component* CreateComponent(void);
 };

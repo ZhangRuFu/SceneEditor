@@ -8,7 +8,6 @@
 #include <map>
 #include "ModelDrawer.h"
 #include "Model.h"
-#include "Transform.h"
 #include "CommonType.h"
 #include "SimpleModelDrawer.h"
 #include "Collider.h"
@@ -21,7 +20,7 @@ private:
 	const SphereCollider *m_collider;
 
 protected:
-	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec3 color) : SimpleModelDrawer(mesh, (Transform*)(collider->getTransform()), color)
+	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec3 color) : SimpleModelDrawer(mesh, color)
 	{
 		m_collider = collider;
 	}

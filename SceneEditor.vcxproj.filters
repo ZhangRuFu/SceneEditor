@@ -204,6 +204,9 @@
     <ClCompile Include="TransformEditor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Picker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommonType.h">

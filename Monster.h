@@ -20,7 +20,7 @@ private:
 public:
 	Monster(void)
 	{
-		ModelArg mArg("E:\\GameDevelop\\Model\\Monster_Animation\\monster.FBX");
+		ModelArg mArg(*this, "E:\\GameDevelop\\Model\\Monster_Animation\\monster.FBX");
 		m_model = dynamic_cast<SkeletonModel*>(AddComponent(mArg));
 	}
 

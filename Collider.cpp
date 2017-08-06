@@ -6,6 +6,15 @@
 #include "Ray.h"
 #include "Entity.h"
 
+//Collider
+void Collider::SetEntity(GameEntity &entity)
+{
+	Component::SetEntity(entity);
+	m_transform = entity.GetTransform();
+}
+
+
+//SphereCollider
 void SphereCollider::CalcModelBoundingBox(Model * model)
 {
 	int sumCount = 0;
@@ -43,7 +52,7 @@ void SphereCollider::CalcModelBoundingBox(Model * model)
 bool SphereCollider::RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
 {
 	//len为float的最大值为无限距离
-	vec3 toCenter = getWorldCenter() - ray.getOrigin();						//射线起点到碰撞球圆心向量
+	vec3 toCenter = GetWorldCenter() - ray.getOrigin();						//射线起点到碰撞球圆心向量
 	float verticalLen = dot(toCenter, ray.getDirection());					//投影长度（从射线起点到垂直点）
 	vec3 intersectedVector = ray.GetPoint(verticalLen) - ray.getOrigin();
 	vec3 r = intersectedVector - toCenter;
@@ -66,18 +75,9 @@ bool SphereCollider::RayCast(const Ray & ray, RaycastHit * hitInfo, float len)
 	return true;
 }
 
-vec3 SphereCollider::getWorldCenter(void) const
+vec3 SphereCollider::GetWorldCenter(void) const
 {
 	 mat4 model = m_transform->GetModelMatrix();
 	 return vec3(model * glm::vec4(m_center, 1.0f));
 }
 
-void Collider::SetEntity(GameEntity * entity)
-{
-	if (entity == nullptr)
-		throw std::exception("Collider : entity为null");
-	m_entity = entity;
-	m_transform = m_entity->GetTransform();
-	if (m_transform == nullptr)
-		throw std::exception("Collider : transform为null");
-}

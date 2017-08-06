@@ -46,6 +46,7 @@
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelDrawer.cpp" />
+    <ClCompile Include="Picker.cpp" />
     <ClCompile Include="RenderMode.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ResourceSystem.cpp" />
