@@ -19,4 +19,4 @@
 - 导出场景信息
 
 ## 目前效果图
-![Engine](./Display/2017-8-6.gif.gif)
+![Engine](./Display/2017-8-6.gif)
