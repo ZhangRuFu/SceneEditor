@@ -14,7 +14,7 @@ void SimpleModelDrawer::Draw()
 	mat4 model = m_transform->GetModelMatrix();
 
 	glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, value_ptr(model));
-	glUniform3fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(m_color));
+	glUniform4fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(m_color));
 
 	int subMeshCount = m_mesh->GetMeshCount();
 	for (int i = 0; i < subMeshCount; i++)
@@ -39,7 +39,7 @@ void SimpleModelDrawer::PublicSet()
 	m_shader->SetUniformValue("projection", projection);
 }
 
-SimpleModelDrawer * SimpleModelDrawer::Create(Model * mesh, vec3 color)
+SimpleModelDrawer * SimpleModelDrawer::Create(Model * mesh, vec4 color)
 {
 	SimpleModelDrawer *drawer = new SimpleModelDrawer(mesh, color);
 	drawer->LoadGraphicsBuffer(mesh);

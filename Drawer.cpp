@@ -27,6 +27,11 @@ void Drawer::AddRenderMode(RenderModeType mode, int setting)
 	case RenderModeType::DepthTest:
 		m_renderMode.push_back(new DepthTestRenderMode(setting));
 		break;
+	case RenderModeType::CameraView:
+		m_renderMode.push_back(new CameraViewRenderMode(setting, m_shader));
+		break;
+	case RenderModeType::Blend:
+		m_renderMode.push_back(new BlendRenderMode());
 	}
 }
 

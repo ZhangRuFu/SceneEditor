@@ -31,10 +31,11 @@ public:
 	void Hit(void);
 
 protected:
-	float ScreenToWorldLen(const glm::ivec2 &originScreenPoint, const glm::ivec2 &destScreenPoint);
+	float ScreenToWorldLen(const glm::ivec2 &originScreenPoint, const glm::ivec2 &destScreenPoint, vec3 &direc);
 };
 
 /*
+*
 *	类名:TranslateAxis
 *	描述：平移坐标轴的分量坐标轴（X、Y、Z轴）
 *	最后修改时间：2017年7月31日21:57:10
@@ -49,6 +50,7 @@ public:
 };
 
 /*
+*
 *	类名:ScaleAxis
 *	描述：缩放坐标轴的分量坐标轴（X、Y、Z轴）
 *	最后修改时间：2017年8月4日18:20:26
@@ -62,6 +64,20 @@ public:
 	virtual void Move(void);
 };
 
+/*
+*	类名:RotateAxis
+*	描述：旋转坐标轴的分量坐标轴（X、Y、Z轴）
+*	最后修改时间：2017年8月4日18:20:26
+*
+*/
+
+class RotateAxis : public TransformAxis
+{
+public:
+	RotateAxis(TransformEditor *originAxis, Axis axis);
+	vec3 GetDirectionWorldPosition(void);
+	virtual void Move(void);
+};
 
 /*
 *
@@ -70,22 +86,29 @@ public:
 *	最后修改时间：2017年7月31日21:57:10
 *
 */
-
+class LineDrawer;
+class SphereCollider;
+class SimpleModelDrawer;
 class TransformEditor : public GameSpirit
 {
 public:
-	enum class TransformEditorType{Translate, Rotate, Scale};
+	enum class TransformEditorType{None, Translate, Rotate, Scale};
 
 private:
 	Transform *m_targetTransform = nullptr;
 	TranslateAxis *m_translateAxis = nullptr;
 	ScaleAxis *m_scaleAxis = nullptr;
+	RotateAxis *m_rotateAxis = nullptr;
 
-	TransformAxis *m_curentAxis = nullptr;
+	GameEntity *m_rotateEntity = nullptr;
+	TransformAxis *m_curentAxis[3];
+	LineDrawer *m_lineDrawer = nullptr;
+	SimpleModelDrawer *m_rotateModel = nullptr;
+	SphereCollider *m_rotateCollider = nullptr;
 	
 	
 	float m_axisLen = 5.0f;		//轴默认长度
-	TransformEditorType m_type = TransformEditorType::Translate;	//当前类型
+	TransformEditorType m_type = TransformEditorType::None;	//当前类型
 
 public:
 	TransformEditor(void);
@@ -94,8 +117,12 @@ public:
 	void ReleaseTarget(void);
 	void TranslateTarget(vec3 t) { m_targetTransform->Move(t); }
 	void ScaleTarget(vec3 s) { m_targetTransform->Scale(s); }
-	void Hit(GameEntity &axis);
+	void RotateTarget(vec3 angle, bool isRadian) { m_targetTransform->Rotate(angle, isRadian); }
+	void Hit(GameEntity &entity, vec3 hitPosition);
 	void ChangeType(TransformEditorType type);
 
-	virtual void Move(void) {};
+	virtual void Move(void);
+
+private:
+	void SetType(TransformEditorType type);
 };

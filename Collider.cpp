@@ -1,6 +1,7 @@
 #include <exception>
 #include <GLM\glm.hpp>
 #include <GLM\gtc\matrix_transform.hpp>
+#include "CollideManager.h"
 #include "Collider.h"
 #include "Model.h"
 #include "Ray.h"
@@ -11,6 +12,7 @@ void Collider::SetEntity(GameEntity &entity)
 {
 	Component::SetEntity(entity);
 	m_transform = entity.GetTransform();
+	CollideManager::Register(*this);
 }
 
 

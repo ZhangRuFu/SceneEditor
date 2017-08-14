@@ -6,6 +6,7 @@
 #include "FreeType.h"
 #include "DragonEngine.h"
 #include "Activity.h"
+#include "LineRender.h"
 
 
 #pragma comment(lib, "glew32.lib")
@@ -33,6 +34,11 @@ RenderSystem* RenderSystem::GetInstance(DragonEngine *engine, int frameWidth, in
 		m_instance = new RenderSystem(engine, frameWidth, frameHeight);
 		m_instance->PostRender();
 	}
+	//字体加载
+	FontRender::Init();
+
+	//LineDrawer初始化
+	LineDrawer::InitBasicLine();
 	return m_instance;
 }
 
@@ -67,8 +73,7 @@ bool RenderSystem::Init()
 	CreateShader("E:\\OpenGL\\Shader\\Font\\", "font");
 	CreateShader("E:\\OpenGL\\Shader\\", "empty");
 
-	//字体加载
-	FontRender::Init();
+	
 
 	return true;
 }
@@ -112,7 +117,7 @@ void RenderSystem::Draw()
 			(*iterator)->Draw();
 
 			if (needSetRenderMode)
-				(*iterator)->SetRenderMode();
+				(*iterator)->ResetRenderMode();
 		}
 	}
 
@@ -121,15 +126,16 @@ void RenderSystem::Draw()
 	while (i != afterEntity.end())
 	{
 		needSetRenderMode = (*i)->NeedSetRenderMode();
+		(*i)->PublicSet();
 		if (needSetRenderMode)
 			(*i)->SetRenderMode();
 
 		//=====================================PublicSet多次！=============================================
-		(*i)->PublicSet();
+		
 		(*i)->Draw();
-
 		if (needSetRenderMode)
-			(*i)->SetRenderMode();
+			(*i)->ResetRenderMode();
+		i++;
 	}
 
 

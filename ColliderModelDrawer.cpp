@@ -18,7 +18,7 @@ void ColliderModelDrawer::Draw()
 	model = m_transform->GetModelMatrix() * model;
 
 	glUniformMatrix4fv(m_shader->GetUniformLocation("model"), 1, GL_FALSE, value_ptr(model));
-	glUniform4fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(vec4(GetColor(), 0.5)));
+	glUniform4fv(m_shader->GetUniformLocation("pureColor"), 1, value_ptr(GetColor()));
 
 	int subMeshCount = m_mesh->GetMeshCount();
 	for (int i = 0; i < subMeshCount; i++)
@@ -33,7 +33,7 @@ void ColliderModelDrawer::Draw()
 	}
 }
 
-ColliderModelDrawer * ColliderModelDrawer::Create(Model * mesh, const SphereCollider * collider, vec3 color)
+ColliderModelDrawer * ColliderModelDrawer::Create(Model * mesh, const SphereCollider * collider, vec4 color)
 {
 	ColliderModelDrawer *drawer = new ColliderModelDrawer(mesh, collider, color);
 	drawer->LoadGraphicsBuffer(mesh);

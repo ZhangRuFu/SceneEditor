@@ -13,6 +13,7 @@
 #include "Collider.h"
 
 using std::map;
+using glm::vec4;
 
 class ColliderModelDrawer : public SimpleModelDrawer
 {
@@ -20,7 +21,7 @@ private:
 	const SphereCollider *m_collider;
 
 protected:
-	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec3 color) : SimpleModelDrawer(mesh, color)
+	ColliderModelDrawer(Model *mesh, const SphereCollider *collider, vec4 color) : SimpleModelDrawer(mesh, color)
 	{
 		m_collider = collider;
 	}
@@ -29,5 +30,5 @@ public:
 	virtual void Draw();
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::ColliderModelDrawer; }
 
-	static ColliderModelDrawer* Create(Model *mesh, const SphereCollider *collider, vec3 color);
+	static ColliderModelDrawer* Create(Model *mesh, const SphereCollider *collider, vec4 color);
 };

@@ -34,7 +34,7 @@ void Picker::Move()
 			GameEntity *entity = hitInfo.getCollider()->GetEntity();
 			//击中坐标轴还是物体
 			if (entity->GetTag() == "TransformEditor")
-				m_axis->Hit(*entity);
+				m_axis->Hit(*entity, hitInfo.getPoint());
 			else
 				m_axis->SetTargetTransform(entity->GetTransform());
 		}

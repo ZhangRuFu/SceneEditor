@@ -54,14 +54,14 @@ public:
 *	描　　述：创建模型组件的参数
 *
 */
-
+using glm::vec4;
 class ModelArg : public ComponentArg
 {
 	enum ModelConfig { BASICMESH = 1, NORMALMESH = 2, PURECOLOR = 4, COLLIDERMODEL = 8  };
 
 	string m_modelPath;
 	BasicMesh m_basicMesh;
-	vec3 m_color;
+	vec4 m_color;
 	int m_modelConfig;
 	SphereCollider *m_collider;
 	
@@ -69,8 +69,9 @@ class ModelArg : public ComponentArg
 public:
 	ModelArg(GameEntity &entity, string modelPath) : m_modelPath(modelPath), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = NORMALMESH; }
 	ModelArg(GameEntity &entity, BasicMesh basicMesh) : m_basicMesh(basicMesh), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH; }
-	ModelArg(GameEntity &entity, BasicMesh basicMesh, vec3 color) :  m_basicMesh(basicMesh), m_color(color), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH | PURECOLOR; }
-	ModelArg(GameEntity &entity, SphereCollider*collider, vec3 color) : m_basicMesh(BasicMesh::SPHERE), m_collider(collider), m_color(color), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = COLLIDERMODEL; }
+	ModelArg(GameEntity &entity, BasicMesh basicMesh, vec3 color) :  m_basicMesh(basicMesh), m_color(color, 1.0f), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH | PURECOLOR; }
+	ModelArg(GameEntity &entity, BasicMesh basicMesh, vec4 color) : m_basicMesh(basicMesh), m_color(color), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = BASICMESH | PURECOLOR; }
+	ModelArg(GameEntity &entity, SphereCollider*collider, vec3 color) : m_basicMesh(BasicMesh::SPHERE), m_collider(collider), m_color(color, 1.0f), m_modelConfig(0), ComponentArg(entity) { m_modelConfig = COLLIDERMODEL; }
 
 	virtual Component* CreateComponent(void);
 };

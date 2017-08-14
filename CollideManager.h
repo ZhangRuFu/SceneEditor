@@ -34,11 +34,14 @@ public:
 	CollideManager(ResourceSystem *rSystem);
 
 	void CalcModelBoundingBox(Model* model);	//MeshManager加载新模型时调用此接口
-	void Register(GameEntity *entity);			//注册碰撞体
+	void _Register(GameEntity *entity);			//注册碰撞体
+	void _Register(Collider &collider);
 	void Move(void) {}
 	bool _RayCast(const Ray &ray, RaycastHit *hitInfo, float len);
 
 	static CollideManager* GetInstance(ResourceSystem *rSystem);
 	static bool RayCast(const Ray &ray, RaycastHit *hitInfo);
 	static bool RayCast(const Ray &ray, RaycastHit *hitInfo, float len);
+	static void Register(GameEntity &entity) { m_instance->_Register(&entity); }
+	static void Register(Collider &collider) { m_instance->_Register(collider); };
 };

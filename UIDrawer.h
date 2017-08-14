@@ -31,7 +31,7 @@
 //	virtual void Draw() = 0;
 //	virtual RenderLevel GetRenderLevel(void) { return RenderLevel::UI; }
 //
-//	void Register() { Drawer::Register(); }
+//	void _Register() { Drawer::_Register(); }
 //};
 //
 ///*

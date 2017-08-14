@@ -63,13 +63,13 @@ void ResourceSystem::Init()
 {
 	//=======================================暂时只添加碰撞体========================================
 	for (list<GameEntity*>::iterator i = m_entityList.begin(); i != m_entityList.end(); i++)
-		m_collideManager->Register(*i);
+		m_collideManager->_Register(*i);
 	for (list<GameSpirit*>::iterator i = m_spiritList.begin(); i != m_spiritList.end(); i++)
-		m_collideManager->Register(*i);
+		m_collideManager->_Register(*i);
 	for (list<Camera*>::iterator i = m_cameraList.begin(); i != m_cameraList.end(); i++)
-		m_collideManager->Register(*i);
+		m_collideManager->_Register(*i);
 	for (list<Light*>::iterator i = m_lightList.begin(); i != m_lightList.end(); i++)
-		m_collideManager->Register(*i);
+		m_collideManager->_Register(*i);
 }
 
 void ResourceSystem::Move()

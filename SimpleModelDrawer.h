@@ -11,14 +11,15 @@
 #include "Transform.h"
 #include "CommonType.h"
 using std::map;
+using glm::vec4;
 
 class SimpleModelDrawer : public StaticModelDrawer
 {
 private:
-	vec3 m_color;
+	vec4 m_color;
 
 protected:
-	SimpleModelDrawer(Model *mesh, vec3 color, string shaderName = "SimpleModel") : StaticModelDrawer(mesh, shaderName), m_color(color) {}
+	SimpleModelDrawer(Model *mesh, vec4 color, string shaderName = "SimpleModel") : StaticModelDrawer(mesh, shaderName), m_color(color) {}
 
 public:
 	virtual void Draw();
@@ -26,7 +27,7 @@ public:
 	virtual int GetComponentType(void) { return (int)ComponentType::Drawer::SimpleModelDrawer; }
 	virtual GraphicsBuffer* LoadGraphicsBuffer(Model *mesh);
 
-	static SimpleModelDrawer* Create(Model *mesh, vec3 color);
+	static SimpleModelDrawer* Create(Model *mesh, vec4 color);
 
-	vec3 GetColor(void) const { return m_color; };
+	vec4 GetColor(void) const { return m_color; };
 };

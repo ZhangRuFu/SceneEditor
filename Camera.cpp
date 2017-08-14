@@ -73,6 +73,13 @@ mat4 Camera::GenProjectionMatrix()
 	return perspective<float>(m_fov, (float)m_windowWidth / m_windowHeight, m_near, m_far);
 }
 
+mat4 Camera::GenOrthoProjectionMatrix()
+{
+	float w = m_windowWidth / 100;
+	float h = m_windowHeight / 100;
+	return ortho(-w, w, -h, h, m_near, m_far);
+}
+
 mat4 Camera::GenWindowProjectionMatrix(float nearZ, float farZ)
 {
 	return ortho<float>(0, m_windowWidth, -m_windowHeight, 0, nearZ, farZ);

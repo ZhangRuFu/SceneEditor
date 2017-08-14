@@ -26,7 +26,7 @@ public:
 class DepthTestRenderMode : public RenderMode
 {
 public:
-	enum class DepthTestMode
+	enum DepthTestMode
 	{
 		AlwaysPass = GL_ALWAYS,
 		NeverPass = GL_NEVER,
@@ -47,3 +47,46 @@ public:
 	virtual void Reset(void);
 	virtual RenderModeType GetRenderMode(void) { return RenderModeType::DepthTest; }
 };
+
+/*
+*
+*	类名:CameraViewRenderMode
+*	描述：更改投影矩阵渲染模式
+*	最后修改时间：2017年8月12日09:49:23
+*
+*/
+class Shader;
+class CameraViewRenderMode : public RenderMode
+{
+public:
+	enum ViewMode{Pespective, Orthographic};
+
+private:
+	ViewMode m_mode;
+	Shader *m_shader;
+
+public:
+	CameraViewRenderMode(int setting, Shader *shader) : m_mode((ViewMode)setting), m_shader(shader) {}
+	virtual void Set(void);
+	virtual void Reset(void);
+	virtual RenderModeType GetRenderMode(void) { return RenderModeType::CameraView; }
+};
+
+
+/*
+*
+*	类名:BlendRenderMode
+*	描述：更改混合渲染模式
+*	最后修改时间：2017年8月12日09:49:23
+*
+*/
+class Shader;
+class BlendRenderMode : public RenderMode
+{
+public:
+	BlendRenderMode(void) {}
+	virtual void Set(void);
+	virtual void Reset(void);
+	virtual RenderModeType GetRenderMode(void) { return RenderModeType::Blend; }
+};
+

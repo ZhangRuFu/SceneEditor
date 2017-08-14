@@ -88,6 +88,7 @@ public:
 
 	//МќХЬ
 	static bool isKeyDown(int key);
+	static bool isKeyDown(int key, int ctrlKey);
 	static bool isKeyUp(int key);
 
 	//ЪѓБъ

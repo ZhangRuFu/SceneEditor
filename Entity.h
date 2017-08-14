@@ -14,10 +14,11 @@
 class GameEntity
 {
 private:
+	bool m_isEnable = true;
 	ComponentManager m_com;
 	std::string m_name;
 	std::string m_tag;
-	bool m_isEnable = true;
+	
 
 protected:
 	Transform *m_transform;
@@ -33,7 +34,9 @@ public:
 	const std::string& GetTag(void) const { return m_tag; }
 	void SetTag(const std::string &tag) { m_tag = tag; }
 
-	bool IsEnable(void) const { return m_isEnable; }
+	bool IsEnable(void) const { 
+		return m_isEnable; 
+	}
 	void Enable(void) { m_isEnable = true; }
 	void Disable(void) { m_isEnable = false; }
 

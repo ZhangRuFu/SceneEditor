@@ -32,7 +32,7 @@ struct GraphicsBuffer
 	vector<GLenum> m_ebo;
 };
 
-enum class RenderModeType { DepthTest };
+enum class RenderModeType { DepthTest, CameraView, Blend };
 
 #define KEY_LBUTTON			1	//Êó±ê×ó¼ü
 #define KEY_RBUTTON			2	//Êó±êÓÒ¼ü
@@ -160,8 +160,8 @@ enum class RenderModeType { DepthTest };
 #define KEY_SCROLL			145			//Scroll
 #define KEY_LSHIFT			160
 #define KEY_RSHIFT			161
-#define KEY_LCONTROL		162
-#define KEY_RCONTROL		163
+#define KEY_LCONTROL		162			//×óCtrl
+#define KEY_RCONTROL		163			//ÓÒCtrl
 #define KEY_LMENU			164
 #define KEY_RMENU			165
 #define KEY_BROWSER_BACK		166

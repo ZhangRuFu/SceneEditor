@@ -30,7 +30,7 @@ void CollideManager::CalcModelBoundingBox(Model * model)
 	}
 }
 
-void CollideManager::Register(GameEntity * entity)
+void CollideManager::_Register(GameEntity * entity)
 {
 	//=================================================暂时假设物体只有一个网格====================================================
 	Model *model = (Model*)entity->GetComponent((int)ComponentType::ComponentClass::Mesh);
@@ -45,9 +45,14 @@ void CollideManager::Register(GameEntity * entity)
 		m_colliders.push_back(collider);
 
 		//可视化碰撞体
-		//ModelArg mArg(collider, vec3(0.0f, 0.0f, 0.6f));
+		//ModelArg mArg(*entity, collider, vec3(0.0f, 0.0f, 0.6f));
 		//entity->AddComponent(mArg);
 	}
+}
+
+void CollideManager::_Register(Collider & collider)
+{
+	m_colliders.push_back(&collider);
 }
 
 bool CollideManager::RayCast(const Ray &ray, RaycastHit * hitInfo)

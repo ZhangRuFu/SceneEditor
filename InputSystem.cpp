@@ -19,6 +19,11 @@ bool InputSystem::isKeyDown(int key)
 	return m_instance->m_keyManager->isKeyDown(key);
 }
 
+bool InputSystem::isKeyDown(int key, int ctrlKey)
+{
+	return m_instance->m_keyManager->isKeyDown(key) && m_instance->m_keyManager->isKeyDown(ctrlKey);
+}
+
 bool InputSystem::isKeyUp(int key)
 {
 	return m_instance->m_keyManager->isKeyUp(key);

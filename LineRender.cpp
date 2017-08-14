@@ -4,7 +4,7 @@
 #include "Shader.h"
 #include "Entity.h"
 
-LineDrawer::LineDrawer(void) : Drawer("empty")
+LineDrawer::LineDrawer(void) : Drawer("empty"), m_color(1.0f, 1.0f, 1.0f)
 {
 	ChangeRenderLevel(RenderLevel::Entity);
 
@@ -27,6 +27,12 @@ LineDrawer::LineDrawer(void) : Drawer("empty")
 
 }
 
+LineDrawer::LineDrawer(BasicLine line) : Drawer("empty"), m_color(1.0f, 1.0f, 1.0f)
+{
+	if(line < BasicLine::Count)
+		*this = m_basicLine[line];
+}
+
 void LineDrawer::SetEntity(GameEntity & entity)
 {
 	Component::SetEntity(entity);
@@ -43,15 +49,11 @@ void LineDrawer::Draw()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * m_lineVertics.size(), m_lineVertics.data(), GL_DYNAMIC_DRAW);
 		m_isChanged = false;
 	}
-	if (m_transform != nullptr)
-	{
-		mat4 model = m_transform->GetModelMatrix();
-		m_shader->SetUniformValue("model", model);
-	}
-	else
-		m_shader->SetUniformValue("model", mat4());
+	mat4 model = m_transform->GetModelMatrix();
+	m_shader->SetUniformValue("model", model);
+	glUniform3fv(m_shader->GetUniformLocation("lineColor"), 1, value_ptr(m_color));
 	glBindVertexArray(m_buffers->m_vao[0]);
-	glDrawArrays(GL_LINES, 0, m_lineVertics.size());
+	glDrawArrays(m_type, 0, m_lineVertics.size());
 	glBindVertexArray(0);
 }
 
@@ -100,3 +102,39 @@ void LineDrawer::AddVertex(vec3 position)
 	m_lineVertics.push_back(position);
 	m_isChanged = true;
 }
+
+void LineDrawer::ChangeLineType(LineType type)
+{
+	switch (type)
+	{
+	case LineDrawer::LINES:
+		m_type = GL_LINES;
+		break;
+	case LineDrawer::LOOP_LINE:
+		m_type = GL_LINE_LOOP;
+		break;
+	case LineDrawer::STRIIP_LINE:
+		m_type = GL_LINE_STRIP;
+		break;
+	}
+}
+
+void LineDrawer::InitBasicLine(void)
+{
+	m_basicLine = new LineDrawer[BasicLine::Count];
+
+	//»·
+	int ringCount = 30;
+	float ringStep = radians(360.0 / ringCount);
+	m_basicLine[BasicLine::Ring].m_lineVertics.resize(ringCount);
+	float curAngle = 0;
+	for (int i = 0; i < ringCount; ++i)
+	{
+		m_basicLine[BasicLine::Ring].m_lineVertics[i] = vec3(cos(curAngle), 0.0f, sin(curAngle));
+		curAngle += ringStep;
+	}
+	m_basicLine[BasicLine::Ring].ChangeLineType(LineType::LOOP_LINE);
+	m_basicLine[BasicLine::Ring].m_isChanged = true;
+}
+
+LineDrawer *LineDrawer::m_basicLine = nullptr;

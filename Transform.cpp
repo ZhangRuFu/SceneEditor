@@ -1,11 +1,12 @@
 #include <GLM\gtc\matrix_transform.hpp>
 #include <GLM\gtx\euler_angles.hpp>
+#include <GLM\gtc\quaternion.hpp>
 #include "Transform.h"
 #include "DragonEngine.h"
 
 using glm::vec4;
 
-Transform::Transform(vec3 position, vec3 rotation, vec3 scale) : m_position(position), m_rotation(rotation), m_scale(scale), m_orientation(0, 0, -1)
+Transform::Transform(vec3 position, vec3 rotation, vec3 scale) : m_position(position), m_euler(rotation), m_scale(scale), m_orientation(0, 0, -1)
 {
 
 }
@@ -25,7 +26,7 @@ void Transform::ChangeOrientation(float angle)
 	mat4 rotate;
 	rotate = glm::rotate(rotate, angle, vec3(0, 1, 0));
 	m_orientation = vec3(rotate * vec4(m_orientation, 0.0));
-	m_rotation.y += angle;
+	m_euler.y += angle;
 }
 
 void Transform::Scale(vec3 & scale)
@@ -33,21 +34,35 @@ void Transform::Scale(vec3 & scale)
 	m_scale += scale;
 }
 
-void Transform::Rotate(Axis axis, float angle)
+void Transform::Rotate(Axis axis, float angle, bool isLocal)
 {
-	//angle = glm::radians(angle);
+	angle = glm::radians(angle);
+	vec3 axisVector;
 	switch (axis)
 	{
 	case Axis::X:
-		m_rotation.x += angle;
+		axisVector = vec3(1.0f, 0.0, 0.0f);
 		break;
 	case Axis::Y:
-		m_rotation.y += angle;
+		axisVector = vec3(0.0f, 1.0, 0.0f);
 		break;
 	case Axis::Z:
-		m_rotation.z += angle;
+		axisVector = vec3(0.0f, 0.0, 1.0f);
 		break;
 	}
+
+	if (isLocal)
+		axisVector = vec3((CalculateModelMatrix() * vec4(axisVector, 1.0)) - (CalculateModelMatrix() * vec4(0.0f, 0.0f, 0.0f, 1.0)));
+	m_quaternion = m_quaternion * angleAxis(angle, axisVector);
+	m_euler = eulerAngles(m_quaternion);
+}
+
+void Transform::Rotate(vec3 angle, bool isRadian)
+{
+	if(isRadian)
+		angle = radians(angle);
+	m_quaternion = m_quaternion * quat(angle);
+	m_euler = eulerAngles(m_quaternion);
 }
 
 vec3 Transform::GetPosition(void) const
@@ -57,7 +72,7 @@ vec3 Transform::GetPosition(void) const
 
 vec3 Transform::GetRotation(void) const
 {
-	return m_rotation;
+	return m_euler;
 }
 
 vec3 Transform::GetScale(void) const
@@ -82,57 +97,50 @@ void Transform::AttachChild(Transform * child)
 mat4 Transform::GetModelMatrix(void)
 {
 	mat4 modelMatrix;
-	bool normal = m_modelMatrixType == ModelMatrixType::All;		//ÌØÊâ¼ÆËã·½Ê½²»±£´æ¾ØÕó
-	if (normal)
-	{
-		if (DragonEngine::GetGameLoopState() == GameLoopState::Render)
-		{
-			//»æÖÆ×´Ì¬±ÜÃâÖØ¸´¼ÆËã£¬±£´æModel¾ØÕó
-			if (m_isUpdated)
-				return m_modelMatrix;
-			m_isUpdated = true;
-		}
-		//Âß¼­¸üÐÂ×´Ì¬ÎÞÐè±£´æModel¾ØÕó
-		modelMatrix = CalculateModelMatrix();
-		if (m_father != nullptr)
-			m_modelMatrix = m_father->GetModelMatrix() * modelMatrix;
-		else
-			m_modelMatrix = modelMatrix;
-		return m_modelMatrix;
-	}
+	if (m_modelNormalCalc)
+		return CalculateModelMatrix();
 	else
-		return CalculateModelMatrix(m_modelMatrixType);
+		return CalculateSpecialModelMatrix();
+}
 
+vec3 Transform::GetWorldOrigin(void)
+{
+	return vec3(GetModelMatrix() * vec4(0, 0, 0, 1.0));
 }
 
 
 mat4 Transform::CalculateModelMatrix(void)
 {
-	mat4 modelMatrix;
-	modelMatrix = glm::translate(modelMatrix, m_position);
-	modelMatrix = modelMatrix * (mat4)glm::eulerAngleXYZ(glm::radians((double)m_rotation.x), glm::radians((double)m_rotation.y), glm::radians((double)m_rotation.z));
-	modelMatrix = glm::scale(modelMatrix, m_scale);
-	return modelMatrix;
+	if (DragonEngine::GetGameLoopState() == GameLoopState::Render)
+	{
+		//»æÖÆ×´Ì¬±ÜÃâÖØ¸´¼ÆËã£¬±£´æModel¾ØÕó
+		if (m_isUpdated)
+			return m_modelMatrix;
+		m_isUpdated = true;
+	}
+	m_modelMatrix = mat4();
+	
+	m_modelMatrix = glm::translate(m_modelMatrix, m_position);
+	m_modelMatrix = m_modelMatrix * glm::mat4_cast(m_quaternion);
+	m_modelMatrix = glm::scale(m_modelMatrix, m_scale);
+	if (m_father != nullptr)
+		m_modelMatrix = m_father->CalculateModelMatrix() * m_modelMatrix;
+	return m_modelMatrix;
 }
 
-mat4 Transform::CalculateModelMatrix(int type)
+mat4 Transform::CalculateSpecialModelMatrix(void)
 {
-	mat4 modelMatrix = mat4();
-	if (!(type & ModelMatrixType::EXCEPTTOP))
+	vec4 fatherTranslate;
+	fatherTranslate.w = 1;
+	mat4 modelMatrix;
+	if (m_father)
 	{
-		if (type & ModelMatrixType::Translate)
-			modelMatrix = glm::translate(modelMatrix, m_position);
-		if (type & ModelMatrixType::Rotation)
-			modelMatrix = modelMatrix * (mat4)glm::eulerAngleXYZ(glm::radians((double)m_rotation.x), glm::radians((double)m_rotation.y), glm::radians((double)m_rotation.z));
-		if (type & ModelMatrixType::Scalation)
-			modelMatrix = glm::scale(modelMatrix, m_scale);
+		mat4 fatherMatrix = m_father->GetModelMatrix();
+		fatherTranslate = fatherMatrix * fatherTranslate;
+		modelMatrix = glm::translate(modelMatrix, vec3(fatherTranslate));
 	}
-	else
-	{
-		type &= (~ModelMatrixType::EXCEPTTOP);
-		modelMatrix = CalculateModelMatrix();
-	}
-	if (m_father != nullptr)
-		modelMatrix = m_father->CalculateModelMatrix(type) * modelMatrix;
+	modelMatrix = glm::translate(modelMatrix, m_position);
+	modelMatrix = modelMatrix * glm::mat4_cast(m_quaternion);
+	modelMatrix = glm::scale(modelMatrix, m_scale);
 	return modelMatrix;
 }
